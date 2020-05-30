@@ -40,6 +40,8 @@ CourseWork::MyForm::~MyForm()
 
 System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
+	head = ML->getList();
+
 	if (act == Action::inp)
 	{
 		Movie m;
@@ -242,9 +244,13 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 			{
 				ML->deleteLastFilm();
 				MessageBox::Show("Последний элемент успешно удалён");
+				head = ML->getList();
 			}
 			else
+			{
 				MessageBox::Show("Список пуст! Прежде чем дополнять таблицу введите её с клавиатуры или загрузите из файла!");
+				head = NULL;
+			}
 		else
 			if (!ML->isListEmpty())
 			{
@@ -252,12 +258,16 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 				{
 					if (ML->deleteFilm(selectedIndex) == 0)
 						MessageBox::Show("Элемент успешно удалён");
+					head = ML->getList();
 				}
 				else
-					MessageBox::Show("Сначала выберите номер элемента, после которого должна осуществляться вставка!");
+					MessageBox::Show("Сначала выберите номер элемента, который нужно удалить!");
 			}
 			else
+			{
 				MessageBox::Show("Список пуст! Прежде чем дополнять таблицу введите её с клавиатуры или загрузите из файла!");
+				head = NULL;
+			}
 
 		current = ML->getList();
 		int i = 1;
@@ -276,9 +286,108 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 	}
 	else if (act == Action::edit)
 	{
+		if (selectedIndex == 0)
+			MessageBox::Show("Сначала выберите элемент, который хотите отредактировать");
+		else
+		{
+			Movie m;
 
+			String^ text = fName->Text;
+			while (text->Contains("  "))
+				text = text->Replace("  ", " ");
+			fName->Text = text;
+
+			text = fGenre->Text;
+			while (text->Contains("  "))
+				text = text->Replace("  ", " ");
+			fGenre->Text = text;
+
+			text = fCountry->Text;
+			while (text->Contains("  "))
+				text = text->Replace("  ", " ");
+			fCountry->Text = text;
+
+			text = fProducer->Text;
+			while (text->Contains("  "))
+				text = text->Replace("  ", " ");
+			fProducer->Text = text;
+
+			text = fFormat->Text;
+			while (text->Contains("  "))
+				text = text->Replace("  ", " ");
+			fFormat->Text = text;
+
+			text = fSound->Text;
+			while (text->Contains("  "))
+				text = text->Replace("  ", " ");
+			fSound->Text = text;
+
+			text = fTime->Text;
+			while (text->Contains("  "))
+				text = text->Replace("  ", " ");
+			fTime->Text = text;
+
+			if (
+				fName->Text == "Введите название" || fName->Text == "" || fName->Text == " " ||
+				fGenre->Text == "Введите жанр" || fGenre->Text == "" || fGenre->Text == " " ||
+				fCountry->Text == "Введите страну производства" || fCountry->Text == "" || fCountry->Text == " " ||
+				fProdYear->Text == "Введите год производства" || fProdYear->Text == "" || fProdYear->Text == " " ||
+				fProducer->Text == "Введите режиссёра" || fProducer->Text == "" || fProducer->Text == " " ||
+				fFormat->Text == "Введите качество" || fFormat->Text == "" || fFormat->Text == " " ||
+				fSound->Text == "Введите озвучку" || fSound->Text == "" || fSound->Text == " " ||
+				fTime->Text == "Введите длительность" || fTime->Text == "" || fTime->Text == " ")
+			{
+				MessageBox::Show("Заполните все поля!");
+				return System::Void();
+			}
+
+			m.name = context.marshal_as<std::string>(fName->Text);
+			m.genre = context.marshal_as<std::string>(fGenre->Text);
+			m.country = context.marshal_as<std::string>(fCountry->Text);
+			m.productionYear = context.marshal_as<std::string>(fProdYear->Text);
+			m.producer = context.marshal_as<std::string>(fProducer->Text);
+			m.format = context.marshal_as<std::string>(fFormat->Text);
+			m.sound = context.marshal_as<std::string>(fSound->Text);
+			m.time = context.marshal_as<std::string>(fTime->Text);
+
+			ML->setElAt(m, selectedIndex);
+
+			selectedIndex = 0;
+
+			fName->Text = "Введите название";
+			fGenre->Text = "Введите жанр";
+			fCountry->Text = "Введите страну производства";
+			fProdYear->Text = "Введите год производства";
+			fProducer->Text = "Введите режиссёра";
+			fFormat->Text = "Введите качество";
+			fSound->Text = "Введите озвучку";
+			fTime->Text = "Введите длительность";
+
+			current = ML->getList();
+			int i = 1;
+			numberOfEl->ClearSelected();
+			numberOfEl->Items->Clear();
+			numberOfEl->BeginUpdate();
+			while (current)
+			{
+				numberOfEl->Items->Add(i.ToString() + ") " + context.marshal_as<String^>(current->name));
+				current = current->link;
+				i++;
+			}
+			numberOfEl->EndUpdate();
+
+			fName->Enabled = false;
+			fGenre->Enabled = false;
+			fCountry->Enabled = false;
+			fProdYear->Enabled = false;
+			fProducer->Enabled = false;
+			fFormat->Enabled = false;
+			fSound->Enabled = false;
+			fTime->Enabled = false;
+		}
 	}
 	
+	head = ML->getList();
 	current = head;
 
 	return System::Void();
@@ -401,8 +510,6 @@ System::Void CourseWork::MyForm::readFile_Click(System::Object ^ sender, System:
 		head = ML->getList();
 		current = head;
 		MessageBox::Show("Данные из файла успешно загружены.");
-		//MyForm::outputList_Click(this, &MyForm::inputList_Click);
-		//outputList_Click(this, this->outputList_Click);
 		break;
 	case 1:
 		MessageBox::Show("Не удалось открыть файл!");
@@ -434,7 +541,7 @@ System::Void CourseWork::MyForm::inputList_Click(System::Object ^ sender, System
 		ee = MessageBox::Show("Таблица уже введена! Если вы продолжите ввод, старые данные будут удалены - для дополнения таблицы воспользуйтесь функцией ""добавить элемент"". Продолжить?","Внимание!", MessageBoxButtons::YesNo, MessageBoxIcon::Question);
 		if (ee == System::Windows::Forms::DialogResult::Yes)
 		{
-			ML->~MovieLibrary();
+			ML->deleteTable();
 		}
 		else
 			return System::Void();
@@ -470,6 +577,11 @@ System::Void CourseWork::MyForm::stopInputList_Click(System::Object ^ sender, Sy
 	chooseElNumber->Enabled = false;
 	labelToPurpose->Visible = false;
 	labelToPurpose->Enabled = false;
+
+	chooseElNumber->Checked = false;
+
+	numberOfEl->Visible = false;
+	numberOfEl->Enabled = false;
 
 	inputList->Enabled = true;
 	readFile->Enabled = true;
@@ -511,7 +623,21 @@ System::Void CourseWork::MyForm::stopInputList_Click(System::Object ^ sender, Sy
 	label7->Visible = true;
 	label8->Visible = true;
 
+	fName->Text = "Введите название";
+	fGenre->Text = "Введите жанр";
+	fCountry->Text = "Введите страну производства";
+	fProdYear->Text = "Введите год производства";
+	fProducer->Text = "Введите режиссёра";
+	fFormat->Text = "Введите качество";
+	fSound->Text = "Введите озвучку";
+	fTime->Text = "Введите длительность";
+
 	act = Action::nul;
+
+	numberOfEl->ClearSelected();
+	numberOfEl->Items->Clear();
+
+	selectedIndex = 0;
 
 	return System::Void();
 }
@@ -606,13 +732,68 @@ System::Void CourseWork::MyForm::deleteElement_Click(System::Object ^ sender, Sy
 		label8->Visible = false;
 	}
 	else
-		MessageBox::Show("Список пуст! Прежде чем дополнять таблицу введите её с клавиатуры или загрузите из файла!");
+		MessageBox::Show("Список пуст! Прежде чем удалять элементы таблицы введите её с клавиатуры или загрузите из файла!");
 
 	return System::Void();
 }
 
 System::Void CourseWork::MyForm::editElement_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
+	if (!ML->isListEmpty())
+	{
+		act = Action::edit;
+
+		//chooseElNumber->Visible = true;
+		//chooseElNumber->Enabled = true;
+
+		numberOfEl->Visible = true;
+		numberOfEl->Enabled = true;
+
+		labelToPurpose->Visible = true;
+		labelToPurpose->Enabled = true;
+
+		inputListPanel->Enabled = true;
+		inputListPanel->Visible = true;
+
+		inputEl->Text = "Редактировать элемент";
+		labelToPurpose->Text = "для изменения";
+
+		dataGridViewForList->Visible = false;
+
+		inputList->Enabled = false;
+		outputList->Enabled = false;
+		readFile->Enabled = false;
+		rewriteFile->Enabled = false;
+
+		addToList->Enabled = false;
+		deleteElement->Enabled = false;
+		editElement->Enabled = false;
+
+		current = ML->getList();
+		int i = 1;
+		numberOfEl->BeginUpdate();
+		while (current)
+		{
+			numberOfEl->Items->Add(i.ToString() + ") " + context.marshal_as<String^>(current->name));
+			current = current->link;
+			i++;
+		}
+		numberOfEl->EndUpdate();
+
+		fName->Enabled = false;
+		fGenre->Enabled = false;
+		fCountry->Enabled = false;
+		fProdYear->Enabled = false;
+		fProducer->Enabled = false;
+		fFormat->Enabled = false;
+		fSound->Enabled = false;
+		fTime->Enabled = false;
+
+		MessageBox::Show("Элемент отредактирован");
+	}
+	else
+		MessageBox::Show("Список пуст! Прежде чем удалять элементы из таблицы введите её с клавиатуры или загрузите из файла!");
+
 	return System::Void();
 }
 
@@ -723,6 +904,31 @@ System::Void CourseWork::MyForm::chooseElNumber_CheckedChanged(System::Object ^ 
 System::Void CourseWork::MyForm::numberOfEl_SelectedIndexChanged(System::Object ^ sender, System::EventArgs ^ e)
 {
 	selectedIndex = numberOfEl->SelectedIndex + 1;
+
+	if (act == Action::edit)
+	{
+		fName->Enabled = true;
+		fGenre->Enabled = true;
+		fCountry->Enabled = true;
+		fProdYear->Enabled = true;
+		fProducer->Enabled = true;
+		fFormat->Enabled = true;
+		fSound->Enabled = true;
+		fTime->Enabled = true;
+
+		Movie* m = ML->getElAt(selectedIndex);
+		if (m != NULL)
+		{
+			fName->Text = context.marshal_as<String^>(m->name);
+			fGenre->Text = context.marshal_as<String^>(m->genre);
+			fCountry->Text = context.marshal_as<String^>(m->country);
+			fProdYear->Text = context.marshal_as<String^>(m->productionYear);
+			fProducer->Text = context.marshal_as<String^>(m->producer);
+			fFormat->Text = context.marshal_as<String^>(m->format);
+			fSound->Text = context.marshal_as<String^>(m->sound);
+			fTime->Text = context.marshal_as<String^>(m->time);
+		}
+	}
 
 	return System::Void();
 }

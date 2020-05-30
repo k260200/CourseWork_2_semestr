@@ -428,7 +428,7 @@ namespace CourseWork {
 			this->editElement->Name = L"editElement";
 			this->editElement->Size = System::Drawing::Size(176, 23);
 			this->editElement->TabIndex = 18;
-			this->editElement->Text = L"Удалить элемент";
+			this->editElement->Text = L"Редактировать элемент";
 			this->editElement->UseVisualStyleBackColor = true;
 			this->editElement->Click += gcnew System::EventHandler(this, &MyForm::editElement_Click);
 			// 

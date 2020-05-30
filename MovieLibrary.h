@@ -28,6 +28,8 @@ public:
 
 	//void showMovie(Movie*); // ###
 
+	int setElAt(Movie, int); // Присваивает указанному элементу переданное значение 
+	Movie* getElAt(int); // Возвращает указатель на указанный элемент списка
 	Movie* getList(); // Возвращает указатель на начало списка
 	bool isListEmpty(); // Говорит, пуст ли список
 
@@ -45,6 +47,7 @@ public:
 	//int deleteFirstFilm(); // Удаляет первый фильм
 	int deleteFilm(int); // Удаляет указанный фильм
 	int deleteLastFilm(); // Удаляет последний фильм
+	void deleteTable(); // Удаляет таблицу целиком
 
 	//void editFilm(string); // редактирует фильм с введённым названием
 

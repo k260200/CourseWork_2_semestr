@@ -14,16 +14,7 @@ MovieLibrary::MovieLibrary()
 
 MovieLibrary::~MovieLibrary()
 {
-	Movie* current = head;
-	Movie* toDelete = current;
-	while (current)
-	{
-		current = current->link;
-		delete toDelete;
-		toDelete = current;
-	}
-	head = NULL;
-	isEmpty = true;
+	this->deleteTable();
 }
 
 //void MovieLibrary::showMovie(Movie *m)
@@ -37,6 +28,56 @@ MovieLibrary::~MovieLibrary()
 //	cout << "Звук - " << m->sound << endl;
 //	cout << "Время - " << m->time << endl;
 //}
+
+int MovieLibrary::setElAt(Movie m, int index)
+{
+	if (!isEmpty)
+	{
+		Movie* current = head;
+		int i = 1;
+		while (current && i <= index)
+		{
+			if (i == index)
+			{
+				current->name = m.name;
+				current->genre = m.genre;
+				current->country = m.country;
+				current->productionYear = m.productionYear;
+				current->producer = m.producer;
+				current->format = m.format;
+				current->sound = m.sound;
+				current->time = m.time;
+			}
+			current = current->link;
+			i++;
+		}
+		return 2;
+	}
+	return 1;
+}
+
+Movie * MovieLibrary::getElAt(int index)
+{
+	if (!isEmpty)
+	{
+		if (index == 1)
+			return head;
+		else
+		{
+			Movie* current = head;
+			int i = 1;
+			while (current && i <= index)
+			{
+				if (i == index)
+					return current;
+				current = current->link;
+				i++;
+			}
+			return NULL;
+		}
+	}
+	return NULL;
+}
 
 Movie * MovieLibrary::getList()
 {
@@ -156,16 +197,18 @@ int MovieLibrary::loadList()
 
 	if (!file.is_open())
 	{
+		file.close();
 		return 1;
 	}
 	else if (file.peek() == -1 || file.peek() == 0)
 	{
+		file.close();
 		return 2;
 	}
 	else
 	{
 		if (!(isEmpty && head == NULL))
-			this->~MovieLibrary();
+			this->deleteTable();
 
 		Movie* tmp = NULL;
 		Movie* current = head;
@@ -337,7 +380,9 @@ int MovieLibrary::deleteFilm(int indexToDelete)
 	if (isEmpty)
 	{
 		return 1;
-	}	
+	}
+	else if (head->link == NULL && indexToDelete == 1)
+		this->deleteTable();
 	else
 	{
 		int index = 1;
@@ -381,14 +426,16 @@ int MovieLibrary::deleteFilm(int indexToDelete)
 
 int MovieLibrary::deleteLastFilm()
 {
+	
 	if (isEmpty)
 		return 1;
+	else if (head->link == NULL)
+		this->deleteTable();
 	else
 	{
 		Movie* current = head;
 		Movie* toDelete = NULL;
 		Movie* previous = NULL;
-
 		while (current->link)
 		{
 			toDelete = current->link;
@@ -399,5 +446,22 @@ int MovieLibrary::deleteLastFilm()
 		delete current;
 		current = NULL;
 		return 0;
+	}
+}
+
+void MovieLibrary::deleteTable()
+{
+	if (!isEmpty && head != NULL)
+	{
+		Movie* current = head;
+		Movie* toDelete = current;
+		while (current)
+		{
+			current = current->link;
+			delete toDelete;
+			toDelete = current;
+		}
+		head = NULL;
+		isEmpty = true;
 	}
 }
