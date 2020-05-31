@@ -1,6 +1,80 @@
 #include "stdafx.h"
 #include "MyForm.h"
 
+void CourseWork::MyForm::showList()
+{
+	if (ML->isListEmpty())
+		return;
+
+	dataGridViewForList->DataSource = NULL;
+
+	int i = 1;
+
+	DataTable ^table; //Невидимая таблица данных
+	DataColumn ^column; //Столбец таблицы
+	DataRow ^row; //Строка таблицы
+
+	//Создаем таблицу данных
+	table = gcnew DataTable();
+
+	//Названия столбцов
+	String^ Column1 = "№";
+	String^ Column2 = "Название";
+	String^ Column3 = "Жанр";
+	String^ Column4 = "Страна производства";
+	String^ Column5 = "Год производства";
+	String^ Column6 = "Режиссёр";
+	String^ Column7 = "Качество";
+	String^ Column8 = "Озвучка";
+	String^ Column9 = "Длительность";
+
+	//Создание и добавление столбцов 
+	column = gcnew DataColumn(Column1, Int32::typeid);
+	table->Columns->Add(column);
+	column = gcnew DataColumn(Column2, String::typeid);
+	table->Columns->Add(column);
+	column = gcnew DataColumn(Column3, String::typeid);
+	table->Columns->Add(column);
+	column = gcnew DataColumn(Column4, String::typeid);
+	table->Columns->Add(column);
+	column = gcnew DataColumn(Column5, String::typeid);
+	table->Columns->Add(column);
+	column = gcnew DataColumn(Column6, String::typeid);
+	table->Columns->Add(column);
+	column = gcnew DataColumn(Column7, String::typeid);
+	table->Columns->Add(column);
+	column = gcnew DataColumn(Column8, String::typeid);
+	table->Columns->Add(column);
+	column = gcnew DataColumn(Column9, String::typeid);
+	table->Columns->Add(column);
+
+	head = ML->getList();
+	current = head;
+
+	while (current != NULL) {
+		//Заполняем строчку таблицы
+		row = table->NewRow();
+		row[Column1] = i;
+		row[Column2] = context.marshal_as<String^>(current->name);
+		row[Column3] = context.marshal_as<String^>(current->genre);
+		row[Column4] = context.marshal_as<String^>(current->country);
+		row[Column5] = context.marshal_as<String^>(current->productionYear);
+		row[Column6] = context.marshal_as<String^>(current->producer);
+		row[Column7] = context.marshal_as<String^>(current->format);
+		row[Column8] = context.marshal_as<String^>(current->sound);
+		row[Column9] = context.marshal_as<String^>(current->time);
+
+		table->Rows->Add(row);
+		i++;
+		current = current->link;
+	}
+
+	//Отображаем таблицу в визуальном компоненте
+	dataGridViewForList->DataSource = table;
+
+	current = head;
+}
+
 CourseWork::MyForm::MyForm(MovieLibrary * list)
 {
 	InitializeComponent();
@@ -24,6 +98,11 @@ CourseWork::MyForm::MyForm(MovieLibrary * list)
 	addToList->Enabled = false;
 	deleteElement->Enabled = false;
 	editElement->Enabled = false;
+
+	specialRequest1->Enabled = false;
+	specialRequest2->Enabled = false;
+	specialRequest3->Enabled = false;
+	specialRequest4->Enabled = false;
 
 	ML = list;
 	head = ML->getList();
@@ -351,6 +430,7 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 			m.time = context.marshal_as<std::string>(fTime->Text);
 
 			ML->setElAt(m, selectedIndex);
+			MessageBox::Show("Элемент отредактирован");
 
 			selectedIndex = 0;
 
@@ -396,7 +476,6 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 System::Void CourseWork::MyForm::outputList_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	current = head;
-	int i = 1;
 	if (head == NULL)
 		if (ML->isListEmpty())
 		{
@@ -409,67 +488,7 @@ System::Void CourseWork::MyForm::outputList_Click(System::Object ^ sender, Syste
 			current = head;
 		}
 
-	dataGridViewForList->DataSource = NULL;
-
-	DataTable ^table; //Невидимая таблица данных
-	DataColumn ^column; //Столбец таблицы
-	DataRow ^row; //Строка таблицы
-
-	//Создаем таблицу данных
-	table = gcnew DataTable();
-
-	//Названия столбцов
-	String^ Column1 = "№";
-	String^ Column2 = "Название";
-	String^ Column3 = "Жанр";
-	String^ Column4 = "Страна производства";
-	String^ Column5 = "Год производства";
-	String^ Column6 = "Режиссёр";
-	String^ Column7 = "Качество";
-	String^ Column8 = "Озвучка";
-	String^ Column9 = "Длительность";
-
-	//Создание и добавление столбцов 
-	column = gcnew DataColumn(Column1, Int32::typeid);
-	table->Columns->Add(column);
-	column = gcnew DataColumn(Column2, String::typeid);
-	table->Columns->Add(column);
-	column = gcnew DataColumn(Column3, String::typeid);
-	table->Columns->Add(column);
-	column = gcnew DataColumn(Column4, String::typeid);
-	table->Columns->Add(column);
-	column = gcnew DataColumn(Column5, String::typeid);
-	table->Columns->Add(column);
-	column = gcnew DataColumn(Column6, String::typeid);
-	table->Columns->Add(column);
-	column = gcnew DataColumn(Column7, String::typeid);
-	table->Columns->Add(column);
-	column = gcnew DataColumn(Column8, String::typeid);
-	table->Columns->Add(column);
-	column = gcnew DataColumn(Column9, String::typeid);
-	table->Columns->Add(column);
-
-
-	while(current != NULL) {
-		//Заполняем строчку таблицы
-		row = table->NewRow();
-		row[Column1] = i;
-		row[Column2] = context.marshal_as<String^>(current->name);
-		row[Column3] = context.marshal_as<String^>(current->genre);
-		row[Column4] = context.marshal_as<String^>(current->country);
-		row[Column5] = context.marshal_as<String^>(current->productionYear);
-		row[Column6] = context.marshal_as<String^>(current->producer);
-		row[Column7] = context.marshal_as<String^>(current->format);
-		row[Column8] = context.marshal_as<String^>(current->sound);
-		row[Column9] = context.marshal_as<String^>(current->time);
-
-		table->Rows->Add(row);
-		i++;
-		current = current->link;
-	}
-
-	//Отображаем таблицу в визуальном компоненте
-	dataGridViewForList->DataSource = table;
+	this->showList();
 
 	current = head;
 
@@ -527,7 +546,14 @@ System::Void CourseWork::MyForm::readFile_Click(System::Object ^ sender, System:
 		deleteElement->Enabled = true;
 		editElement->Enabled = true;
 		dataGridViewForList->Visible = true;
+
+		specialRequest1->Enabled = true;
+		specialRequest2->Enabled = true;
+		specialRequest3->Enabled = true;
+		specialRequest4->Enabled = true;
 	}
+
+	this->showList();
 	
 	return System::Void();
 }
@@ -565,6 +591,11 @@ System::Void CourseWork::MyForm::inputList_Click(System::Object ^ sender, System
 	deleteElement->Enabled = false;
 	editElement->Enabled = false;
 
+	specialRequest1->Enabled = false;
+	specialRequest2->Enabled = false;
+	specialRequest3->Enabled = false;
+	specialRequest4->Enabled = false;
+
 	return System::Void();
 }
 
@@ -594,6 +625,11 @@ System::Void CourseWork::MyForm::stopInputList_Click(System::Object ^ sender, Sy
 		addToList->Enabled = true;
 		deleteElement->Enabled = true;
 		editElement->Enabled = true;
+
+		specialRequest1->Enabled = true;
+		specialRequest2->Enabled = true;
+		specialRequest3->Enabled = true;
+		specialRequest4->Enabled = true;
 	}
 
 	fName->Enabled = true;
@@ -639,6 +675,8 @@ System::Void CourseWork::MyForm::stopInputList_Click(System::Object ^ sender, Sy
 
 	selectedIndex = 0;
 
+	this->showList();
+
 	return System::Void();
 }
 
@@ -669,6 +707,11 @@ System::Void CourseWork::MyForm::addToList_Click(System::Object ^ sender, System
 		addToList->Enabled = false;
 		deleteElement->Enabled = false;
 		editElement->Enabled = false;
+
+		specialRequest1->Enabled = false;
+		specialRequest2->Enabled = false;
+		specialRequest3->Enabled = false;
+		specialRequest4->Enabled = false;
 	}
 	else
 		MessageBox::Show("Список пуст! Прежде чем удалять элементы из таблицы введите её с клавиатуры или загрузите из файла!");
@@ -703,6 +746,11 @@ System::Void CourseWork::MyForm::deleteElement_Click(System::Object ^ sender, Sy
 		addToList->Enabled = false;
 		deleteElement->Enabled = false;
 		editElement->Enabled = false;
+
+		specialRequest1->Enabled = false;
+		specialRequest2->Enabled = false;
+		specialRequest3->Enabled = false;
+		specialRequest4->Enabled = false;
 
 		fName->Enabled = false;
 		fGenre->Enabled = false;
@@ -765,6 +813,11 @@ System::Void CourseWork::MyForm::editElement_Click(System::Object ^ sender, Syst
 		readFile->Enabled = false;
 		rewriteFile->Enabled = false;
 
+		specialRequest1->Enabled = false;
+		specialRequest2->Enabled = false;
+		specialRequest3->Enabled = false;
+		specialRequest4->Enabled = false;
+
 		addToList->Enabled = false;
 		deleteElement->Enabled = false;
 		editElement->Enabled = false;
@@ -788,12 +841,469 @@ System::Void CourseWork::MyForm::editElement_Click(System::Object ^ sender, Syst
 		fFormat->Enabled = false;
 		fSound->Enabled = false;
 		fTime->Enabled = false;
-
-		MessageBox::Show("Элемент отредактирован");
 	}
 	else
 		MessageBox::Show("Список пуст! Прежде чем удалять элементы из таблицы введите её с клавиатуры или загрузите из файла!");
 
+	return System::Void();
+}
+
+System::Void CourseWork::MyForm::specialRequest1_Click(System::Object ^ sender, System::EventArgs ^ e)
+{
+	specialRequestsPanel->Enabled = true;
+	specialRequestsPanel->Visible = true;
+
+	label9->Visible = true;
+	textBox1->Visible = true;
+
+	label10->Visible = false;
+	textBox2->Visible = false;
+
+	dataGridViewForList->Visible = false;
+
+	inputList->Enabled = false;
+	outputList->Enabled = false;
+	readFile->Enabled = false;
+	rewriteFile->Enabled = false;
+
+	specialRequest1->Enabled = false;
+	specialRequest2->Enabled = false;
+	specialRequest3->Enabled = false;
+	specialRequest4->Enabled = false;
+
+	addToList->Enabled = false;
+	deleteElement->Enabled = false;
+	editElement->Enabled = false;
+
+	label9->Text = "Введите название фильма";
+
+	act = Action::sr1;
+
+	return System::Void();
+}
+
+System::Void CourseWork::MyForm::specialRequest2_Click(System::Object ^ sender, System::EventArgs ^ e)
+{
+	specialRequestsPanel->Enabled = true;
+	specialRequestsPanel->Visible = true;
+
+	label9->Visible = true;
+	textBox1->Visible = true;
+
+	label10->Visible = true;
+	textBox2->Visible = true;
+
+	dataGridViewForList->Visible = false;
+
+	inputList->Enabled = false;
+	outputList->Enabled = false;
+	readFile->Enabled = false;
+	rewriteFile->Enabled = false;
+
+	specialRequest1->Enabled = false;
+	specialRequest2->Enabled = false;
+	specialRequest3->Enabled = false;
+	specialRequest4->Enabled = false;
+
+	addToList->Enabled = false;
+	deleteElement->Enabled = false;
+	editElement->Enabled = false;
+
+	label9->Text = "Укажите жанр фильма";
+	label10->Text = "Введите страну производства фильма";
+
+	act = Action::sr2;
+
+	return System::Void();
+}
+
+System::Void CourseWork::MyForm::specialRequest3_Click(System::Object ^ sender, System::EventArgs ^ e)
+{
+	specialRequestsPanel->Enabled = true;
+	specialRequestsPanel->Visible = true;
+
+	label9->Visible = true;
+	textBox1->Visible = true;
+
+	label10->Visible = false;
+	textBox2->Visible = false;
+
+	dataGridViewForList->Visible = false;
+
+	inputList->Enabled = false;
+	outputList->Enabled = false;
+	readFile->Enabled = false;
+	rewriteFile->Enabled = false;
+
+	specialRequest1->Enabled = false;
+	specialRequest2->Enabled = false;
+	specialRequest3->Enabled = false;
+	specialRequest4->Enabled = false;
+
+	addToList->Enabled = false;
+	deleteElement->Enabled = false;
+	editElement->Enabled = false;
+
+	label9->Text = "Укажите режиссёра";
+
+	act = Action::sr3;
+
+	return System::Void();
+}
+
+System::Void CourseWork::MyForm::specialRequest4_Click(System::Object ^ sender, System::EventArgs ^ e)
+{
+	MessageBox::Show("Ба!");
+
+	return System::Void();
+}
+
+System::Void CourseWork::MyForm::confirmButton_Click(System::Object ^ sender, System::EventArgs ^ e)
+{
+	String^ text = textBox1->Text;
+	while (text->Contains("  "))
+		text = text->Replace("  ", " ");
+	textBox1->Text = text;
+
+	text = textBox2->Text;
+	while (text->Contains("  "))
+		text = text->Replace("  ", " ");
+	textBox2->Text = text;
+
+	if (ML->isListEmpty() == true)
+	{
+		MessageBox::Show("Таблица пуста! Сначала заполните её!");
+		return System::Void();
+	}
+
+	if ( ( String::IsNullOrEmpty(textBox1->Text->ToString()) || textBox1->Text == " " ) ||
+		act == Action::sr2 &&  ( String::IsNullOrEmpty(textBox2->Text->ToString()) || textBox2->Text == " ") )
+	{
+		MessageBox::Show("Введите требуемые данные!");
+		return System::Void();
+	}
+
+	if (act == Action::sr1)
+	{
+		head = ML->getList();
+		current = head;
+
+		if (ML->isListEmpty())
+			return;
+
+		dataGridViewForList->DataSource = NULL;
+
+		int i = 1;
+
+		DataTable ^table; //Невидимая таблица данных
+		DataColumn ^column; //Столбец таблицы
+		DataRow ^row; //Строка таблицы
+
+		//Создаем таблицу данных
+		table = gcnew DataTable();
+
+		//Названия столбцов
+		String^ Column1 = "№";
+		String^ Column2 = "Название";
+		String^ Column3 = "Жанр";
+		String^ Column4 = "Страна производства";
+		String^ Column5 = "Год производства";
+		String^ Column6 = "Режиссёр";
+		String^ Column7 = "Качество";
+		String^ Column8 = "Озвучка";
+		String^ Column9 = "Длительность";
+
+		//Создание и добавление столбцов 
+		column = gcnew DataColumn(Column1, Int32::typeid);
+		table->Columns->Add(column);
+		column = gcnew DataColumn(Column2, String::typeid);
+		table->Columns->Add(column);
+		column = gcnew DataColumn(Column3, String::typeid);
+		table->Columns->Add(column);
+		column = gcnew DataColumn(Column4, String::typeid);
+		table->Columns->Add(column);
+		column = gcnew DataColumn(Column5, String::typeid);
+		table->Columns->Add(column);
+		column = gcnew DataColumn(Column6, String::typeid);
+		table->Columns->Add(column);
+		column = gcnew DataColumn(Column7, String::typeid);
+		table->Columns->Add(column);
+		column = gcnew DataColumn(Column8, String::typeid);
+		table->Columns->Add(column);
+		column = gcnew DataColumn(Column9, String::typeid);
+		table->Columns->Add(column);
+
+		while (current != NULL) {
+			//Заполняем строчку таблицы
+			row = table->NewRow();
+			row[Column1] = i;
+			row[Column2] = context.marshal_as<String^>(current->name);
+			row[Column3] = context.marshal_as<String^>(current->genre);
+			row[Column4] = context.marshal_as<String^>(current->country);
+			row[Column5] = context.marshal_as<String^>(current->productionYear);
+			row[Column6] = context.marshal_as<String^>(current->producer);
+			row[Column7] = context.marshal_as<String^>(current->format);
+			row[Column8] = context.marshal_as<String^>(current->sound);
+			row[Column9] = context.marshal_as<String^>(current->time);
+
+			if (textBox1->Text->ToString() == row[Column2]->ToString())
+				table->Rows->Add(row);	
+			i++;
+			current = current->link;
+		}
+
+		//Отображаем таблицу в визуальном компоненте
+		dataGridViewForList->DataSource = table;
+
+		current = head;
+	}
+	if (act == Action::sr2)
+	{
+		head = ML->getList();
+		current = head;
+
+		if (ML->isListEmpty())
+			return;
+
+		dataGridViewForList->DataSource = NULL;
+
+		int i = 1;
+
+		DataTable ^table; //Невидимая таблица данных
+		DataColumn ^column; //Столбец таблицы
+		DataRow ^row; //Строка таблицы
+
+		//Создаем таблицу данных
+		table = gcnew DataTable();
+
+		//Названия столбцов
+		String^ Column1 = "№";
+		String^ Column2 = "Название";
+		String^ Column3 = "Жанр";
+		String^ Column4 = "Страна производства";
+		String^ Column5 = "Год производства";
+		String^ Column6 = "Режиссёр";
+		String^ Column7 = "Качество";
+		String^ Column8 = "Озвучка";
+		String^ Column9 = "Длительность";
+
+		//Создание и добавление столбцов 
+		column = gcnew DataColumn(Column1, Int32::typeid);
+		table->Columns->Add(column);
+		column = gcnew DataColumn(Column2, String::typeid);
+		table->Columns->Add(column);
+		column = gcnew DataColumn(Column3, String::typeid);
+		table->Columns->Add(column);
+		column = gcnew DataColumn(Column4, String::typeid);
+		table->Columns->Add(column);
+		column = gcnew DataColumn(Column5, String::typeid);
+		table->Columns->Add(column);
+		column = gcnew DataColumn(Column6, String::typeid);
+		table->Columns->Add(column);
+		column = gcnew DataColumn(Column7, String::typeid);
+		table->Columns->Add(column);
+		column = gcnew DataColumn(Column8, String::typeid);
+		table->Columns->Add(column);
+		column = gcnew DataColumn(Column9, String::typeid);
+		table->Columns->Add(column);
+
+		while (current != NULL) {
+			//Заполняем строчку таблицы
+			row = table->NewRow();
+			row[Column1] = i;
+			row[Column2] = context.marshal_as<String^>(current->name);
+			row[Column3] = context.marshal_as<String^>(current->genre);
+			row[Column4] = context.marshal_as<String^>(current->country);
+			row[Column5] = context.marshal_as<String^>(current->productionYear);
+			row[Column6] = context.marshal_as<String^>(current->producer);
+			row[Column7] = context.marshal_as<String^>(current->format);
+			row[Column8] = context.marshal_as<String^>(current->sound);
+			row[Column9] = context.marshal_as<String^>(current->time);
+
+			if (textBox1->Text->ToString() == row[Column3]->ToString() && textBox2->Text->ToString() == row[Column4]->ToString())
+				table->Rows->Add(row);
+			i++;
+			current = current->link;
+		}
+
+		//Отображаем таблицу в визуальном компоненте
+		dataGridViewForList->DataSource = table;
+
+		current = head;
+	}
+	if (act == Action::sr3)
+	{
+		MovieLibrary* tmp = new MovieLibrary;
+		head = ML->getList();
+		current = head;
+
+		std::string standart = context.marshal_as<std::string>(textBox1->Text);
+
+		while (current)
+		{
+			if (current->producer == standart)
+			{
+				if (tmp->isListEmpty())
+					tmp->createFirstFilm(*current);
+				else
+					tmp->addFilm(*current);
+			}
+
+			current = current->link;
+		}
+
+		if (tmp->isListEmpty())
+			MessageBox::Show("Фильмов этого режиссёра не найдено!");
+		else
+		{
+			tmp->sort();
+
+			dataGridViewForList->DataSource = NULL;
+
+			int i = 1;
+
+			DataTable ^table; //Невидимая таблица данных
+			DataColumn ^column; //Столбец таблицы
+			DataRow ^row; //Строка таблицы
+
+			//Создаем таблицу данных
+			table = gcnew DataTable();
+
+			//Названия столбцов
+			String^ Column1 = "№";
+			String^ Column2 = "Название";
+			String^ Column3 = "Жанр";
+			String^ Column4 = "Страна производства";
+			String^ Column5 = "Год производства";
+			String^ Column6 = "Режиссёр";
+			String^ Column7 = "Качество";
+			String^ Column8 = "Озвучка";
+			String^ Column9 = "Длительность";
+
+			//Создание и добавление столбцов 
+			column = gcnew DataColumn(Column1, Int32::typeid);
+			table->Columns->Add(column);
+			column = gcnew DataColumn(Column2, String::typeid);
+			table->Columns->Add(column);
+			column = gcnew DataColumn(Column3, String::typeid);
+			table->Columns->Add(column);
+			column = gcnew DataColumn(Column4, String::typeid);
+			table->Columns->Add(column);
+			column = gcnew DataColumn(Column5, String::typeid);
+			table->Columns->Add(column);
+			column = gcnew DataColumn(Column6, String::typeid);
+			table->Columns->Add(column);
+			column = gcnew DataColumn(Column7, String::typeid);
+			table->Columns->Add(column);
+			column = gcnew DataColumn(Column8, String::typeid);
+			table->Columns->Add(column);
+			column = gcnew DataColumn(Column9, String::typeid);
+			table->Columns->Add(column);
+
+			head = tmp->getList();
+			current = head;
+
+			while (current != NULL) {
+				//Заполняем строчку таблицы
+				row = table->NewRow();
+				row[Column1] = i;
+				row[Column2] = context.marshal_as<String^>(current->name);
+				row[Column3] = context.marshal_as<String^>(current->genre);
+				row[Column4] = context.marshal_as<String^>(current->country);
+				row[Column5] = context.marshal_as<String^>(current->productionYear);
+				row[Column6] = context.marshal_as<String^>(current->producer);
+				row[Column7] = context.marshal_as<String^>(current->format);
+				row[Column8] = context.marshal_as<String^>(current->sound);
+				row[Column9] = context.marshal_as<String^>(current->time);
+
+				table->Rows->Add(row);
+				i++;
+				current = current->link;
+			}
+
+			//Отображаем таблицу в визуальном компоненте
+			dataGridViewForList->DataSource = table;
+
+			tmp->deleteTable();
+			head = ML->getList();
+			current = head;
+		}
+	}
+
+	specialRequestsPanel->Enabled = false;
+	specialRequestsPanel->Visible = false;
+
+	dataGridViewForList->Visible = true;
+
+	inputList->Enabled = true;
+	outputList->Enabled = true;
+	readFile->Enabled = true;
+	rewriteFile->Enabled = true;
+
+	specialRequest1->Enabled = true;
+	specialRequest2->Enabled = true;
+	specialRequest3->Enabled = true;
+	specialRequest4->Enabled = true;
+
+	addToList->Enabled = true;
+	deleteElement->Enabled = true;
+	editElement->Enabled = true;
+
+	act = Action::nul;
+
+	textBox1->Clear();
+	textBox1->Clear();
+
+	return System::Void();
+}
+
+System::Void CourseWork::MyForm::cancelButton_Click(System::Object ^ sender, System::EventArgs ^ e)
+{
+	specialRequestsPanel->Enabled = false;
+	specialRequestsPanel->Visible = false;
+
+	specialRequestsPanel->Enabled = false;
+	specialRequestsPanel->Visible = false;
+
+	label9->Visible = false;
+	textBox1->Visible = false;
+
+	label10->Visible = false;
+	textBox2->Visible = false;
+
+	dataGridViewForList->Visible = true;
+
+	inputList->Enabled = true;
+	outputList->Enabled = true;
+	readFile->Enabled = true;
+	rewriteFile->Enabled = true;
+
+	specialRequest1->Enabled = true;
+	specialRequest2->Enabled = true;
+	specialRequest3->Enabled = true;
+	specialRequest4->Enabled = true;
+
+	addToList->Enabled = true;
+	deleteElement->Enabled = true;
+	editElement->Enabled = true;
+
+	textBox1->Clear();
+	textBox1->Clear();
+
+	act = Action::nul;
+
+	return System::Void();
+}
+
+System::Void CourseWork::MyForm::exitButton_Click(System::Object ^ sender, System::EventArgs ^ e)
+{
+	System::Windows::Forms::DialogResult ee;
+
+	ee = MessageBox::Show("Выйти из программы?", "Внимание!", MessageBoxButtons::YesNo, MessageBoxIcon::Question);
+	if (ee == System::Windows::Forms::DialogResult::Yes)
+	{
+		exit(0);
+	}
 	return System::Void();
 }
 
@@ -864,6 +1374,29 @@ System::Void CourseWork::MyForm::fTime_KeyPress(System::Object ^ sender, System:
 {
 	Char c = e->KeyChar;
 	if (c != 8 && c != ' ' && c != ':' && c != '.' && c != ',' && !Char::IsLetter(c) && !Char::IsControl(c) && !Char::IsDigit(c))
+		e->Handled = true;
+
+	return System::Void();
+}
+
+System::Void CourseWork::MyForm::textBox1_KeyPress(System::Object ^ sender, System::Windows::Forms::KeyPressEventArgs ^ e)
+{
+	Char c = e->KeyChar;
+	
+	if (act == Action::sr1)
+		if (c != 8 && c != ' ' && c != ':' && c != '.' && c != ',' && c != '-' && c != '!' && c != '?' && !Char::IsLetter(c) && !Char::IsControl(c) && !Char::IsDigit(c))
+			e->Handled = true;
+	else if (act == Action::sr2 || act == Action::sr3)
+		if (c != 8 && c != ' ' && c != '.' && c != ',' && c != '-' && !Char::IsLetter(c) && !Char::IsControl(c))
+			e->Handled = true;
+
+	return System::Void();
+}
+
+System::Void CourseWork::MyForm::textBox2_KeyPress(System::Object ^ sender, System::Windows::Forms::KeyPressEventArgs ^ e)
+{
+	Char c = e->KeyChar;
+	if (c != 8 && c != ' ' &&  c != '.' && c != ',' && c != '-' && !Char::IsLetter(c) && !Char::IsControl(c))
 		e->Handled = true;
 
 	return System::Void();

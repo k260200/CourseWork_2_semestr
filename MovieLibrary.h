@@ -49,6 +49,9 @@ public:
 	int deleteLastFilm(); // Удаляет последний фильм
 	void deleteTable(); // Удаляет таблицу целиком
 
+	void swap(Movie*, Movie*); // Поменять два элемента местами
+	void sort(); // Отсортировать таблицу
+
 	//void editFilm(string); // редактирует фильм с введённым названием
 
 	//Movie* getInfo(string); // Возвращает информацию о фильме с введённым названием

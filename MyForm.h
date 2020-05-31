@@ -21,7 +21,7 @@ namespace CourseWork {
 	using namespace System::Data;
 	using namespace System::Drawing;
 
-	public enum class Action { nul, inp, add, del, edit };
+	public enum class Action { nul, inp, add, del, edit, sr1, sr2, sr3, sr4 };
 
 	/// <summary>
 	/// Сводка для MyForm
@@ -29,13 +29,29 @@ namespace CourseWork {
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
 		// Мои поля
-	public:
+	private:
 		int selectedIndex;
 		Action act;
 		MovieLibrary* ML;
 		Movie* current;
 		Movie* head;
-		msclr::interop::marshal_context context;
+	private: System::Windows::Forms::Button^  specialRequest1;
+	private: System::Windows::Forms::Button^  specialRequest2;
+	private: System::Windows::Forms::Button^  specialRequest3;
+	private: System::Windows::Forms::Button^  specialRequest4;
+	private: System::Windows::Forms::Panel^  specialRequestsPanel;
+	private: System::Windows::Forms::Label^  label10;
+	private: System::Windows::Forms::Label^  label9;
+	private: System::Windows::Forms::TextBox^  textBox2;
+	private: System::Windows::Forms::TextBox^  textBox1;
+	private: System::Windows::Forms::Button^  cancelButton;
+	private: System::Windows::Forms::Button^  confirmButton;
+	private: System::Windows::Forms::Button^  exitButton;
+			 msclr::interop::marshal_context context;
+	
+		//Мои методы
+	public:
+		void showList();
 	public:
 	private: System::Windows::Forms::Panel^  inputListPanel;
 	private: System::Windows::Forms::Button^  stopInputList;
@@ -126,8 +142,21 @@ namespace CourseWork {
 			this->addToList = (gcnew System::Windows::Forms::Button());
 			this->deleteElement = (gcnew System::Windows::Forms::Button());
 			this->editElement = (gcnew System::Windows::Forms::Button());
+			this->specialRequest1 = (gcnew System::Windows::Forms::Button());
+			this->specialRequest2 = (gcnew System::Windows::Forms::Button());
+			this->specialRequest3 = (gcnew System::Windows::Forms::Button());
+			this->specialRequest4 = (gcnew System::Windows::Forms::Button());
+			this->specialRequestsPanel = (gcnew System::Windows::Forms::Panel());
+			this->label10 = (gcnew System::Windows::Forms::Label());
+			this->label9 = (gcnew System::Windows::Forms::Label());
+			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
+			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->cancelButton = (gcnew System::Windows::Forms::Button());
+			this->confirmButton = (gcnew System::Windows::Forms::Button());
+			this->exitButton = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewForList))->BeginInit();
 			this->inputListPanel->SuspendLayout();
+			this->specialRequestsPanel->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// fName
@@ -432,11 +461,136 @@ namespace CourseWork {
 			this->editElement->UseVisualStyleBackColor = true;
 			this->editElement->Click += gcnew System::EventHandler(this, &MyForm::editElement_Click);
 			// 
+			// specialRequest1
+			// 
+			this->specialRequest1->Location = System::Drawing::Point(12, 255);
+			this->specialRequest1->Name = L"specialRequest1";
+			this->specialRequest1->Size = System::Drawing::Size(177, 40);
+			this->specialRequest1->TabIndex = 19;
+			this->specialRequest1->Text = L"Информация о фильме по названию";
+			this->specialRequest1->UseVisualStyleBackColor = true;
+			this->specialRequest1->Click += gcnew System::EventHandler(this, &MyForm::specialRequest1_Click);
+			// 
+			// specialRequest2
+			// 
+			this->specialRequest2->Location = System::Drawing::Point(13, 301);
+			this->specialRequest2->Name = L"specialRequest2";
+			this->specialRequest2->Size = System::Drawing::Size(176, 34);
+			this->specialRequest2->TabIndex = 20;
+			this->specialRequest2->Text = L"Вывод фильмов определённого жанра и страны";
+			this->specialRequest2->UseVisualStyleBackColor = true;
+			this->specialRequest2->Click += gcnew System::EventHandler(this, &MyForm::specialRequest2_Click);
+			// 
+			// specialRequest3
+			// 
+			this->specialRequest3->Location = System::Drawing::Point(12, 341);
+			this->specialRequest3->Name = L"specialRequest3";
+			this->specialRequest3->Size = System::Drawing::Size(177, 57);
+			this->specialRequest3->TabIndex = 21;
+			this->specialRequest3->Text = L"Вывод фильмов определённого режиссёра в алфавитном порядке";
+			this->specialRequest3->UseVisualStyleBackColor = true;
+			this->specialRequest3->Click += gcnew System::EventHandler(this, &MyForm::specialRequest3_Click);
+			// 
+			// specialRequest4
+			// 
+			this->specialRequest4->Location = System::Drawing::Point(12, 404);
+			this->specialRequest4->Name = L"specialRequest4";
+			this->specialRequest4->Size = System::Drawing::Size(177, 68);
+			this->specialRequest4->TabIndex = 22;
+			this->specialRequest4->Text = L"Диаграмма процентного соотношения стран-производителей фильмов";
+			this->specialRequest4->UseVisualStyleBackColor = true;
+			this->specialRequest4->Click += gcnew System::EventHandler(this, &MyForm::specialRequest4_Click);
+			// 
+			// specialRequestsPanel
+			// 
+			this->specialRequestsPanel->Controls->Add(this->label10);
+			this->specialRequestsPanel->Controls->Add(this->label9);
+			this->specialRequestsPanel->Controls->Add(this->textBox2);
+			this->specialRequestsPanel->Controls->Add(this->textBox1);
+			this->specialRequestsPanel->Controls->Add(this->cancelButton);
+			this->specialRequestsPanel->Controls->Add(this->confirmButton);
+			this->specialRequestsPanel->Enabled = false;
+			this->specialRequestsPanel->Location = System::Drawing::Point(270, 449);
+			this->specialRequestsPanel->Name = L"specialRequestsPanel";
+			this->specialRequestsPanel->Size = System::Drawing::Size(643, 137);
+			this->specialRequestsPanel->TabIndex = 23;
+			this->specialRequestsPanel->Visible = false;
+			// 
+			// label10
+			// 
+			this->label10->AutoSize = true;
+			this->label10->Location = System::Drawing::Point(7, 37);
+			this->label10->Name = L"label10";
+			this->label10->Size = System::Drawing::Size(41, 13);
+			this->label10->TabIndex = 5;
+			this->label10->Text = L"label10";
+			// 
+			// label9
+			// 
+			this->label9->AutoSize = true;
+			this->label9->Location = System::Drawing::Point(4, 10);
+			this->label9->Name = L"label9";
+			this->label9->Size = System::Drawing::Size(35, 13);
+			this->label9->TabIndex = 4;
+			this->label9->Text = L"label9";
+			// 
+			// textBox2
+			// 
+			this->textBox2->Location = System::Drawing::Point(256, 34);
+			this->textBox2->Name = L"textBox2";
+			this->textBox2->Size = System::Drawing::Size(361, 20);
+			this->textBox2->TabIndex = 3;
+			this->textBox2->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &MyForm::textBox2_KeyPress);
+			// 
+			// textBox1
+			// 
+			this->textBox1->Location = System::Drawing::Point(256, 3);
+			this->textBox1->Name = L"textBox1";
+			this->textBox1->Size = System::Drawing::Size(361, 20);
+			this->textBox1->TabIndex = 2;
+			this->textBox1->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &MyForm::textBox1_KeyPress);
+			// 
+			// cancelButton
+			// 
+			this->cancelButton->Location = System::Drawing::Point(453, 103);
+			this->cancelButton->Name = L"cancelButton";
+			this->cancelButton->Size = System::Drawing::Size(164, 23);
+			this->cancelButton->TabIndex = 1;
+			this->cancelButton->Text = L"Назад";
+			this->cancelButton->UseVisualStyleBackColor = true;
+			this->cancelButton->Click += gcnew System::EventHandler(this, &MyForm::cancelButton_Click);
+			// 
+			// confirmButton
+			// 
+			this->confirmButton->Location = System::Drawing::Point(256, 103);
+			this->confirmButton->Name = L"confirmButton";
+			this->confirmButton->Size = System::Drawing::Size(168, 23);
+			this->confirmButton->TabIndex = 0;
+			this->confirmButton->Text = L"Вывод";
+			this->confirmButton->UseVisualStyleBackColor = true;
+			this->confirmButton->Click += gcnew System::EventHandler(this, &MyForm::confirmButton_Click);
+			// 
+			// exitButton
+			// 
+			this->exitButton->Location = System::Drawing::Point(13, 614);
+			this->exitButton->Name = L"exitButton";
+			this->exitButton->Size = System::Drawing::Size(176, 23);
+			this->exitButton->TabIndex = 24;
+			this->exitButton->Text = L"Выход";
+			this->exitButton->UseVisualStyleBackColor = true;
+			this->exitButton->Click += gcnew System::EventHandler(this, &MyForm::exitButton_Click);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1330, 650);
+			this->Controls->Add(this->exitButton);
+			this->Controls->Add(this->specialRequestsPanel);
+			this->Controls->Add(this->specialRequest4);
+			this->Controls->Add(this->specialRequest3);
+			this->Controls->Add(this->specialRequest2);
+			this->Controls->Add(this->specialRequest1);
 			this->Controls->Add(this->editElement);
 			this->Controls->Add(this->deleteElement);
 			this->Controls->Add(this->addToList);
@@ -452,6 +606,8 @@ namespace CourseWork {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewForList))->EndInit();
 			this->inputListPanel->ResumeLayout(false);
 			this->inputListPanel->PerformLayout();
+			this->specialRequestsPanel->ResumeLayout(false);
+			this->specialRequestsPanel->PerformLayout();
 			this->ResumeLayout(false);
 
 		}
@@ -464,19 +620,37 @@ private: System::Void fProducer_KeyPress(System::Object^  sender, System::Window
 private: System::Void fFormat_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
 private: System::Void fSound_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
 private: System::Void fTime_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
+private: System::Void textBox1_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
+private: System::Void textBox2_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
+
 
 private: System::Void chooseElNumber_CheckedChanged(System::Object^  sender, System::EventArgs^  e);
 
 private: System::Void numberOfEl_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e);
 
+
 private: System::Void inputEl_Click(System::Object^  sender, System::EventArgs^  e);
+
 private: System::Void outputList_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void rewriteFile_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void readFile_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void inputList_Click(System::Object^  sender, System::EventArgs^  e);
+
 private: System::Void stopInputList_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void addToList_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void deleteElement_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void editElement_Click(System::Object^  sender, System::EventArgs^  e);
+
+
+private: System::Void specialRequest1_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void specialRequest2_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void specialRequest3_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void specialRequest4_Click(System::Object^  sender, System::EventArgs^  e);
+
+private: System::Void confirmButton_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void cancelButton_Click(System::Object^  sender, System::EventArgs^  e);
+
+
+private: System::Void exitButton_Click(System::Object^  sender, System::EventArgs^  e);
 };
 }

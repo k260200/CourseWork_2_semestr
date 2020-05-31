@@ -47,6 +47,8 @@ int MovieLibrary::setElAt(Movie m, int index)
 				current->format = m.format;
 				current->sound = m.sound;
 				current->time = m.time;
+
+				return 0;
 			}
 			current = current->link;
 			i++;
@@ -463,5 +465,68 @@ void MovieLibrary::deleteTable()
 		}
 		head = NULL;
 		isEmpty = true;
+	}
+}
+
+void MovieLibrary::swap(Movie *m1, Movie *m2)
+{
+	if (m1 != NULL && m2 != NULL)
+	{
+		Movie *t = new Movie;
+		t->name = m1->name;
+		t->genre = m1->genre;
+		t->country = m1->country;
+		t->productionYear = m1->productionYear;
+		t->producer = m1->producer;
+		t->format = m1->format;
+		t->sound = m1->sound;
+		t->time = m1->time;
+
+		m1->name = m2->name;
+		m1->genre = m2->genre;
+		m1->country = m2->country;
+		m1->productionYear = m2->productionYear;
+		m1->producer = m2->producer;
+		m1->format = m2->format;
+		m1->sound = m2->sound;
+		m1->time = m2->time;
+
+		m2->name = t->name;
+		m2->genre = t->genre;
+		m2->country = t->country;
+		m2->productionYear = t->productionYear;
+		m2->producer = t->producer;
+		m2->format = t->format;
+		m2->sound = t->sound;
+		m2->time = t->time;
+	}
+	else
+		cout << "Check your privelege!" << endl;
+}
+
+void MovieLibrary::sort()
+{
+	Movie* current = head;
+	if (head == NULL || isEmpty)
+	{
+		cout << "Список пуст!" << endl;
+	}
+	else
+	{
+		bool isSorted = false;
+		while (!isSorted)
+		{
+			isSorted = true;
+			current = head;
+			while (current->link)
+			{
+				if (current->name > current->link->name)
+				{
+					swap(current, current->link);
+					isSorted = false;
+				}
+				current = current->link;
+			}
+		}
 	}
 }
