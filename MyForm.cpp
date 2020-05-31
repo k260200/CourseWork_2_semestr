@@ -104,6 +104,8 @@ CourseWork::MyForm::MyForm(MovieLibrary * list)
 	specialRequest3->Enabled = false;
 	specialRequest4->Enabled = false;
 
+	chartFor4Request->Series[0]->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Pie;
+
 	ML = list;
 	head = ML->getList();
 	current = head;
@@ -953,7 +955,30 @@ System::Void CourseWork::MyForm::specialRequest3_Click(System::Object ^ sender, 
 
 System::Void CourseWork::MyForm::specialRequest4_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
-	MessageBox::Show("Ба!");
+	//MessageBox::Show("Ба!");
+
+	if (ML->isListEmpty())
+	{
+		MessageBox::Show("Сначала введите данные!");
+		return System::Void();
+	}
+
+	Double a1 = 15, a2 = 20, a3 = 45, a4 = 5;
+
+	chartFor4Request->Series[0]->Points->Clear();
+
+	chartFor4Request->Series[0]->Points->AddY(a1);
+	chartFor4Request->Series[0]->Points->AddY(a2);
+	chartFor4Request->Series[0]->Points->AddY(a3);
+	chartFor4Request->Series[0]->Points->AddY(a4);
+
+	chartFor4Request->Series[0]->Points[0]->LegendText = "один";
+	chartFor4Request->Series[0]->Points[1]->LegendText = "два";
+	chartFor4Request->Series[0]->Points[2]->LegendText = "три";
+	chartFor4Request->Series[0]->Points[3]->LegendText = "четыре";
+
+	chartFor4Request->Enabled = true;
+	chartFor4Request->Visible = true;
 
 	return System::Void();
 }

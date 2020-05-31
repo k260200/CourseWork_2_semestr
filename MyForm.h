@@ -47,6 +47,7 @@ namespace CourseWork {
 	private: System::Windows::Forms::Button^  cancelButton;
 	private: System::Windows::Forms::Button^  confirmButton;
 	private: System::Windows::Forms::Button^  exitButton;
+	private: System::Windows::Forms::DataVisualization::Charting::Chart^  chartFor4Request;
 			 msclr::interop::marshal_context context;
 	
 		//Мои методы
@@ -112,6 +113,9 @@ namespace CourseWork {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^  chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::Legend^  legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
+			System::Windows::Forms::DataVisualization::Charting::Series^  series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->fName = (gcnew System::Windows::Forms::TextBox());
 			this->fGenre = (gcnew System::Windows::Forms::TextBox());
 			this->fCountry = (gcnew System::Windows::Forms::TextBox());
@@ -154,9 +158,11 @@ namespace CourseWork {
 			this->cancelButton = (gcnew System::Windows::Forms::Button());
 			this->confirmButton = (gcnew System::Windows::Forms::Button());
 			this->exitButton = (gcnew System::Windows::Forms::Button());
+			this->chartFor4Request = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewForList))->BeginInit();
 			this->inputListPanel->SuspendLayout();
 			this->specialRequestsPanel->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chartFor4Request))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// fName
@@ -580,11 +586,30 @@ namespace CourseWork {
 			this->exitButton->UseVisualStyleBackColor = true;
 			this->exitButton->Click += gcnew System::EventHandler(this, &MyForm::exitButton_Click);
 			// 
+			// chartFor4Request
+			// 
+			chartArea1->Name = L"ChartArea1";
+			this->chartFor4Request->ChartAreas->Add(chartArea1);
+			this->chartFor4Request->Enabled = false;
+			legend1->Name = L"Legend1";
+			this->chartFor4Request->Legends->Add(legend1);
+			this->chartFor4Request->Location = System::Drawing::Point(942, 255);
+			this->chartFor4Request->Name = L"chartFor4Request";
+			series1->ChartArea = L"ChartArea1";
+			series1->Legend = L"Legend1";
+			series1->Name = L"Series1";
+			this->chartFor4Request->Series->Add(series1);
+			this->chartFor4Request->Size = System::Drawing::Size(300, 300);
+			this->chartFor4Request->TabIndex = 25;
+			this->chartFor4Request->Text = L"Диаграмма";
+			this->chartFor4Request->Visible = false;
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1330, 650);
+			this->Controls->Add(this->chartFor4Request);
 			this->Controls->Add(this->exitButton);
 			this->Controls->Add(this->specialRequestsPanel);
 			this->Controls->Add(this->specialRequest4);
@@ -608,6 +633,7 @@ namespace CourseWork {
 			this->inputListPanel->PerformLayout();
 			this->specialRequestsPanel->ResumeLayout(false);
 			this->specialRequestsPanel->PerformLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chartFor4Request))->EndInit();
 			this->ResumeLayout(false);
 
 		}
