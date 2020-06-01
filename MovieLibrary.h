@@ -37,6 +37,7 @@ public:
 	//void showList(); // Вывести таблицу на экран ###
 	int saveList(); // Сохранить таблицу в файл
 	int loadList(); // Загрузить таблицу из файла
+	void setFileName(string);
 	
 	void createFirstFilm(Movie); // Добавить первый элемент
 	void addFilm(Movie); // Добавить фильм (в конец)

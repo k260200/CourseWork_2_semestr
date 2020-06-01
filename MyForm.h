@@ -49,11 +49,14 @@ namespace CourseWork {
 	private: System::Windows::Forms::Button^  confirmButton;
 	private: System::Windows::Forms::Button^  exitButton;
 	private: System::Windows::Forms::DataVisualization::Charting::Chart^  chartFor4Request;
+	private: System::Windows::Forms::SaveFileDialog^  saveFileDialog1;
+	private: System::Windows::Forms::OpenFileDialog^  openFileDialog1;
 			 msclr::interop::marshal_context context;
 	
 		//Мои методы
-	public:
+	private:
 		void showList();
+		void updateDiag();
 	public:
 	private: System::Windows::Forms::Panel^  inputListPanel;
 	private: System::Windows::Forms::Button^  stopInputList;
@@ -160,6 +163,8 @@ namespace CourseWork {
 			this->confirmButton = (gcnew System::Windows::Forms::Button());
 			this->exitButton = (gcnew System::Windows::Forms::Button());
 			this->chartFor4Request = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
+			this->saveFileDialog1 = (gcnew System::Windows::Forms::SaveFileDialog());
+			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewForList))->BeginInit();
 			this->inputListPanel->SuspendLayout();
 			this->specialRequestsPanel->SuspendLayout();
@@ -604,6 +609,15 @@ namespace CourseWork {
 			this->chartFor4Request->TabIndex = 25;
 			this->chartFor4Request->Text = L"Диаграмма";
 			this->chartFor4Request->Visible = false;
+			// 
+			// saveFileDialog1
+			// 
+			this->saveFileDialog1->Filter = L"Текстовые файлы |*.txt";
+			// 
+			// openFileDialog1
+			// 
+			this->openFileDialog1->FileName = L"openFileDialog1";
+			this->openFileDialog1->Filter = L"Текстовые файлы |*.txt";
 			// 
 			// MyForm
 			// 
