@@ -1,13 +1,17 @@
 #include "stdafx.h"
 #include "MyForm.h"
 
+// Вывод таблицы на экран (метод)
 void CourseWork::MyForm::showList()
 {
+	// Проверка - не пуста ли таблица
 	if (ML->isListEmpty())
 		return;
 
+	// Очищаем таблицу от предыдущих данных
 	dataGridViewForList->DataSource = NULL;
 
+	// Инициализируем счётчик
 	int i = 1;
 
 	DataTable ^table; //Невидимая таблица данных
@@ -48,6 +52,7 @@ void CourseWork::MyForm::showList()
 	column = gcnew DataColumn(Column9, String::typeid);
 	table->Columns->Add(column);
 
+	// Устанавливаем указатели
 	head = ML->getList();
 	current = head;
 
@@ -72,30 +77,36 @@ void CourseWork::MyForm::showList()
 	//Отображаем таблицу в визуальном компоненте
 	dataGridViewForList->DataSource = table;
 
+	//Устанавливаем указатель на текущий элемент в начало списка
 	current = head;
 }
 
+// Обновление данных диаграммы (метод)
 void CourseWork::MyForm::updateDiag()
 {
-	if (!ML->isListEmpty())
+	if (!ML->isListEmpty()) // Если таблица не пуста
 	{
-		chartFor4Request->Series[0]->Points->Clear();
+		chartFor4Request->Series[0]->Points->Clear(); // Очищаем предыдущие данные
 
-		dataCounter dc(ML->getList());
-		dc.analyse();
+		dataCounter dc(ML->getList()); // Создаём объект класса dataCounter и передаём ему данные о кинотеке
+		dc.analyse(); // Формируем выборку
 
+		// Передаём графическому элементу типа Chart (диаграмма) сформированные данные
 		for (int i = 0; i < dc.getAmountOfStats(); ++i)
 		{
 			chartFor4Request->Series[0]->Points->AddY(dc.getPointAt(i));
 			chartFor4Request->Series[0]->Points[i]->LegendText = context.marshal_as<String^>(dc.getStatAt(i));
 		}
 
+		// Удаляем сформированную выборку
 		dc.clear();
 	}
 }
 
+// Конструктор формы
 CourseWork::MyForm::MyForm(MovieLibrary * list)
 {
+	// Инициализируем переменные и прячем графические элементы, которые не должны быть доступны пользователю, пока не введена таблица
 	InitializeComponent();
 
 	act = Action::nul;
@@ -128,8 +139,13 @@ CourseWork::MyForm::MyForm(MovieLibrary * list)
 	ML = list;
 	head = ML->getList();
 	current = head;
+
+	// Вывод на экран подсказки
+	MessageBox::Show("Эта программа разработана для курсовой работы на тему ""Разработка приложения с использованием динамических структур данных"" \nпо курсу Основы Алгоритмизации и ООП \nВыполнил - студент группы 940, Башев К.С.");
+	MessageBox::Show("Для начала работы с программой требуется ввести данные с клавиатуры или загрузить из файла - иначе функционал будет недоступен.");
 }
 
+// Деструктор формы
 CourseWork::MyForm::~MyForm()
 {
 	if (components)
@@ -138,14 +154,16 @@ CourseWork::MyForm::~MyForm()
 	}
 }
 
+// Нажата кнопка "ввод" на специальной панели
 System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
-	head = ML->getList();
+	head = ML->getList(); // Получаем данные
 
-	if (act == Action::inp)
+	if (act == Action::inp) // Если панель вызвана с целью ввода списка с клавиатуры
 	{
-		Movie m;
+		Movie m; // Временная переменная
 
+		// Убираем лишние пробелы из текстовых окон
 		String^ text = fName->Text;
 		while (text->Contains("  "))
 			text = text->Replace("  ", " ");
@@ -181,6 +199,7 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 			text = text->Replace("  ", " ");
 		fTime->Text = text;
 
+		// Проверяем введённые пользователем данные
 		if (
 			fName->Text == "Введите название" || fName->Text == "" || fName->Text == " " ||
 			fGenre->Text == "Введите жанр" || fGenre->Text == "" || fGenre->Text == " " ||
@@ -195,6 +214,7 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 			return System::Void();
 		}
 
+		// Преобразуем типы из управляемого Text в стандартный std::string
 		m.name = context.marshal_as<std::string>(fName->Text);
 		m.genre = context.marshal_as<std::string>(fGenre->Text);
 		m.country = context.marshal_as<std::string>(fCountry->Text);
@@ -204,11 +224,13 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 		m.sound = context.marshal_as<std::string>(fSound->Text);
 		m.time = context.marshal_as<std::string>(fTime->Text);
 
+		// В зависимости от того, пуст ли список
 		if (ML->isListEmpty())
-			ML->createFirstFilm(m);
+			ML->createFirstFilm(m); // Создаём первый элемент
 		else
-			ML->addFilm(m);
+			ML->addFilm(m); // Или добавляем элемент в конец
 
+		// Выводим текст-приглашение на тексторые поля
 		fName->Text = "Введите название";
 		fGenre->Text = "Введите жанр";
 		fCountry->Text = "Введите страну производства";
@@ -218,10 +240,11 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 		fSound->Text = "Введите озвучку";
 		fTime->Text = "Введите длительность";
 	}
-	else if (act == Action::add)
+	else if (act == Action::add) // Если панель вызвана с целью добавить элемент в таблицу
 	{
-		Movie m;
+		Movie m; // Создаём временную переменную
 
+		// Удаляем лишние проблелы
 		String^ text = fName->Text;
 		while (text->Contains("  "))
 			text = text->Replace("  ", " ");
@@ -257,6 +280,7 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 			text = text->Replace("  ", " ");
 		fTime->Text = text;
 
+		// Проверяем введённые данные
 		if (
 			fName->Text == "Введите название" || fName->Text == "" || fName->Text == " " ||
 			fGenre->Text == "Введите жанр" || fGenre->Text == "" || fGenre->Text == " " ||
@@ -271,6 +295,7 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 			return System::Void();
 		}
 
+		// Преобразуем их
 		m.name = context.marshal_as<std::string>(fName->Text);
 		m.genre = context.marshal_as<std::string>(fGenre->Text);
 		m.country = context.marshal_as<std::string>(fCountry->Text);
@@ -280,8 +305,9 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 		m.sound = context.marshal_as<std::string>(fSound->Text);
 		m.time = context.marshal_as<std::string>(fTime->Text);
 
-		if (!chooseElNumber->Checked)
-			if (!ML->isListEmpty())
+		// Добавляем элемент в список
+		if (!chooseElNumber->Checked) // Если пользователь не выбрал конкретное место
+			if (!ML->isListEmpty()) // Добавляем в конец
 			{
 				ML->addFilm(m);
 				MessageBox::Show("Элемент добавлен в конец списка!");
@@ -291,27 +317,27 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 		else
 			if (!ML->isListEmpty())
 			{
-				if (selectedIndex > 1)
+				if (selectedIndex > 1) // Если пользователь выбрал, после какого из элементов должен быть добавлен новый
 				{
-					//cout << selectedIndex << endl;
-					if (ML->addFilm(m, selectedIndex - 1) == 0)
+					if (ML->addFilm(m, selectedIndex - 1) == 0) // Добавляем
 						MessageBox::Show("Элемент успешно добавлен");
 				}
-				else if (selectedIndex == 1)
+				else if (selectedIndex == 1) // Если пользователь хочет добавить элемент в начало списка
 				{
-					if (ML->addFirstFilm(m) == 0)
+					if (ML->addFirstFilm(m) == 0) // Добавляем
 					{
 						head = ML->getList();
 						MessageBox::Show("Элемент успешно добавлен в начало списка");
 					}
 						
 				}
-				else
+				else // Если пользователь хочет добавить элемент в конкретное место (поставлена галочка в checkBox), но не указал куда
 					MessageBox::Show("Сначала выберите номер элемента, после которого должна осуществляться вставка!");
 			}
 			else
 				MessageBox::Show("Список пуст! Прежде чем дополнять таблицу введите её с клавиатуры или загрузите из файла!");
 
+		// Заново инициализируем некоторые компоненты после изменения списка
 		current = ML->getList();
 		int i = 1;
 		numberOfEl->ClearSelected();
@@ -337,12 +363,12 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 		fSound->Text = "Введите озвучку";
 		fTime->Text = "Введите длительность";
 	}
-	else if (act == Action::del)
+	else if (act == Action::del) // Если панель вызвана с целью удалить элемент
 	{
-		if (!chooseElNumber->Checked)
+		if (!chooseElNumber->Checked) // Пользователь не выбрал конкретный элемент
 			if (!ML->isListEmpty())
 			{
-				ML->deleteLastFilm();
+				ML->deleteLastFilm(); // Удаляем последний
 				MessageBox::Show("Последний элемент успешно удалён");
 				head = ML->getList();
 			}
@@ -354,9 +380,9 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 		else
 			if (!ML->isListEmpty())
 			{
-				if (selectedIndex > 0)
+				if (selectedIndex > 0) // Пользователь выбрал элемент для удаления
 				{
-					if (ML->deleteFilm(selectedIndex) == 0)
+					if (ML->deleteFilm(selectedIndex) == 0) // Удаляем его
 						MessageBox::Show("Элемент успешно удалён");
 					head = ML->getList();
 				}
@@ -369,7 +395,7 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 				head = NULL;
 			}
 
-		current = ML->getList();
+		// Обновляем данные после удаления элементов
 		int i = 1;
 		numberOfEl->ClearSelected();
 		numberOfEl->Items->Clear();
@@ -384,14 +410,15 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 
 		selectedIndex = 0;
 	}
-	else if (act == Action::edit)
+	else if (act == Action::edit) // Панель вызвана с целью отредактироваль элемент
 	{
-		if (selectedIndex == 0)
+		if (selectedIndex == 0) // Просим пользователя выбрать элемент для редактирования, если он этого не сделал
 			MessageBox::Show("Сначала выберите элемент, который хотите отредактировать");
 		else
 		{
 			Movie m;
 
+			// Убираем пробелы
 			String^ text = fName->Text;
 			while (text->Contains("  "))
 				text = text->Replace("  ", " ");
@@ -427,6 +454,7 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 				text = text->Replace("  ", " ");
 			fTime->Text = text;
 
+			// Проверяем ввод
 			if (
 				fName->Text == "Введите название" || fName->Text == "" || fName->Text == " " ||
 				fGenre->Text == "Введите жанр" || fGenre->Text == "" || fGenre->Text == " " ||
@@ -440,7 +468,8 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 				MessageBox::Show("Заполните все поля!");
 				return System::Void();
 			}
-
+			
+			// Преобразуем данные
 			m.name = context.marshal_as<std::string>(fName->Text);
 			m.genre = context.marshal_as<std::string>(fGenre->Text);
 			m.country = context.marshal_as<std::string>(fCountry->Text);
@@ -450,9 +479,11 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 			m.sound = context.marshal_as<std::string>(fSound->Text);
 			m.time = context.marshal_as<std::string>(fTime->Text);
 
+			// Присваиваем выбранному элементу введённое значение
 			ML->setElAt(m, selectedIndex);
 			MessageBox::Show("Элемент отредактирован");
 
+			// Обновляем данные
 			selectedIndex = 0;
 
 			fName->Text = "Введите название";
@@ -488,16 +519,18 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 		}
 	}
 	
+	// Обновляем данные ещё раз
 	head = ML->getList();
 	current = head;
 
 	return System::Void();
 }
 
+// Нажата кнопка "Вывести таблицу на экран"
 System::Void CourseWork::MyForm::outputList_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	current = head;
-	if (head == NULL)
+	if (head == NULL) // Если табица не пуста
 		if (ML->isListEmpty())
 		{
 			MessageBox::Show("Список пуст! Прежде, чем выводить его на экран - заполните таблицу вручную или загрузите из файла.");
@@ -505,23 +538,28 @@ System::Void CourseWork::MyForm::outputList_Click(System::Object ^ sender, Syste
 		}
 		else
 		{
+			// Получаем данные о кинотеке
 			head = ML->getList();
 			current = head;
 		}
 
+	// Выводим её на экран
 	this->showList();
 
+	// обновляем данные
 	current = head;
 
 	return System::Void();
 }
 
+// Нажата кнопка "Сохранить таблицу в файл"
 System::Void CourseWork::MyForm::rewriteFile_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	System::Windows::Forms::DialogResult ee;
 
+	// Спрашиваем - хочет ли пользователь выбрать конкретное место, чтобы сохранить таблицу
 	ee = MessageBox::Show("Сохранить таблицу в новом файле? (по умолчанию будет перезаписан указанный ранее файл или файл database.txt)", "Внимание!", MessageBoxButtons::YesNo, MessageBoxIcon::Question);
-	if (ee == System::Windows::Forms::DialogResult::Yes)
+	if (ee == System::Windows::Forms::DialogResult::Yes) // Если да
 		if (saveFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 		{
 			string newNameOfFile = context.marshal_as<std::string>(saveFileDialog1->FileName);
@@ -531,10 +569,10 @@ System::Void CourseWork::MyForm::rewriteFile_Click(System::Object ^ sender, Syst
 				return System::Void();
 			}
 			else
-				ML->setFileName(newNameOfFile);
+				ML->setFileName(newNameOfFile); // Обновляем название файла
 		}
 			
-
+	// Сохраняем таблицу в файл
 	switch (ML->saveList())
 	{
 	case 0:
@@ -551,12 +589,13 @@ System::Void CourseWork::MyForm::rewriteFile_Click(System::Object ^ sender, Syst
 	return System::Void();
 }
 
+// Нажата кнопка "Загрузить таблицу из файла"
 System::Void CourseWork::MyForm::readFile_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
+	// Хочет ли пользователь выбрать файл, откуда будут загружены данные?
 	System::Windows::Forms::DialogResult ee;
-
 	ee = MessageBox::Show("Загрузить таблицу из нового файла? (по умолчанию таблица будет загружена из указанного ранее файла или из файла database.txt)", "Внимание!", MessageBoxButtons::YesNo, MessageBoxIcon::Question);
-	if (ee == System::Windows::Forms::DialogResult::Yes)
+	if (ee == System::Windows::Forms::DialogResult::Yes) // Да
 		if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 		{
 			string newNameOfFile = context.marshal_as<std::string>(openFileDialog1->FileName);
@@ -566,15 +605,14 @@ System::Void CourseWork::MyForm::readFile_Click(System::Object ^ sender, System:
 				return System::Void();
 			}
 			else
-				ML->setFileName(newNameOfFile);
+				ML->setFileName(newNameOfFile); // Изменяем имя файла для чтения
 		}
 
-
-
+	// Считываем данные из файла
 	if (!ML->isListEmpty())
 	{
+		// Предупреждаем, что текущая таблица удалится
 		System::Windows::Forms::DialogResult ee;
-
 		ee = MessageBox::Show("Таблица уже введена, при продолжении она перезапишется данными из файла. Продолжить?", "Внимание!", MessageBoxButtons::YesNo, MessageBoxIcon::Question);
 		if (ee == System::Windows::Forms::DialogResult::No)
 			return System::Void();
@@ -596,6 +634,7 @@ System::Void CourseWork::MyForm::readFile_Click(System::Object ^ sender, System:
 	
 	if (!ML->isListEmpty())
 	{
+		// Если после загрузки таблица не пуста - показываем другие кнопки
 		outputList->Enabled = true;
 		rewriteFile->Enabled = true;
 		addToList->Enabled = true;
@@ -609,18 +648,20 @@ System::Void CourseWork::MyForm::readFile_Click(System::Object ^ sender, System:
 		specialRequest4->Enabled = true;
 	}
 
+	// Вывоб таблицы на экран и обновление диаграммы
 	this->showList();
 	this->updateDiag();
 	
 	return System::Void();
 }
 
+// Пользователь запрашивает ввод данных с клавиатуры
 System::Void CourseWork::MyForm::inputList_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	if (!ML->isListEmpty())
 	{
+		//Предупреждаем, что текущая таблица удалится
 		System::Windows::Forms::DialogResult ee;
-
 		ee = MessageBox::Show("Таблица уже введена! Если вы продолжите ввод, старые данные будут удалены - для дополнения таблицы воспользуйтесь функцией ""добавить элемент"". Продолжить?","Внимание!", MessageBoxButtons::YesNo, MessageBoxIcon::Question);
 		if (ee == System::Windows::Forms::DialogResult::Yes)
 		{
@@ -630,13 +671,16 @@ System::Void CourseWork::MyForm::inputList_Click(System::Object ^ sender, System
 			return System::Void();
 	}
 
+	// Устанавливаем режим ввода с клавиатуры
 	act = Action::inp;
 
+	// Выводим на форму нужные для ввода элементы
 	inputListPanel->Enabled = true;
 	inputListPanel->Visible = true;
 
 	inputEl->Text = "Ввести элемент";
 
+	// Скрываем другие графические элементы
 	dataGridViewForList->Visible = false;
 
 	inputList->Enabled = false;
@@ -656,8 +700,10 @@ System::Void CourseWork::MyForm::inputList_Click(System::Object ^ sender, System
 	return System::Void();
 }
 
+// Нажата кнопка "стоп" на специальной панели
 System::Void CourseWork::MyForm::stopInputList_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
+	// Прячем элементы формы
 	inputListPanel->Enabled = false;
 	inputListPanel->Visible = false;
 
@@ -673,7 +719,7 @@ System::Void CourseWork::MyForm::stopInputList_Click(System::Object ^ sender, Sy
 
 	inputList->Enabled = true;
 	readFile->Enabled = true;
-	if (!ML->isListEmpty())
+	if (!ML->isListEmpty()) // Если Таблица заполнена - показываем кнопки для взаимодействия с таблицей и саму таблицу
 	{
 		dataGridViewForList->Visible = true;
 
@@ -689,6 +735,8 @@ System::Void CourseWork::MyForm::stopInputList_Click(System::Object ^ sender, Sy
 		specialRequest4->Enabled = true;
 	}
 
+	// Включаем другие элементы формы (они находятся на специальных панелях и всё равно невидимы)
+	// Однако некоторые функции могли их спрятать - нужно вывести их, чтобы сделать возможной работу других функций
 	fName->Enabled = true;
 	fGenre->Enabled = true;
 	fCountry->Enabled = true;
@@ -716,6 +764,10 @@ System::Void CourseWork::MyForm::stopInputList_Click(System::Object ^ sender, Sy
 	label7->Visible = true;
 	label8->Visible = true;
 
+	// Устанавливаем режим ожидания команды
+	act = Action::nul;
+
+	// Обновляем данные
 	fName->Text = "Введите название";
 	fGenre->Text = "Введите жанр";
 	fCountry->Text = "Введите страну производства";
@@ -725,25 +777,29 @@ System::Void CourseWork::MyForm::stopInputList_Click(System::Object ^ sender, Sy
 	fSound->Text = "Введите озвучку";
 	fTime->Text = "Введите длительность";
 
-	act = Action::nul;
+	
 
 	numberOfEl->ClearSelected();
 	numberOfEl->Items->Clear();
 
 	selectedIndex = 0;
 
+	// Выводим на экран таблицу и обновляем данные для диаграммы
 	this->showList();
 	this->updateDiag();
 
 	return System::Void();
 }
 
+// Пользователь запрашивает дополнение таблицы
 System::Void CourseWork::MyForm::addToList_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	if (!ML->isListEmpty())
 	{
+		// Устанавливаем соответствующий режим
 		act = Action::add;
 
+		// Показываем нужные элементы формы
 		chooseElNumber->Visible = true;
 		chooseElNumber->Enabled = true;
 		labelToPurpose->Visible = true;
@@ -755,6 +811,7 @@ System::Void CourseWork::MyForm::addToList_Click(System::Object ^ sender, System
 		inputEl->Text = "Добавить элемент";
 		labelToPurpose->Text = "для добавления";
 
+		// Скрываем другие элементы формы
 		dataGridViewForList->Visible = false;
 
 		inputList->Enabled = false;
@@ -777,12 +834,15 @@ System::Void CourseWork::MyForm::addToList_Click(System::Object ^ sender, System
 	return System::Void();
 }
 
+// Пользователь запрашивает удаление элементов таблицы
 System::Void CourseWork::MyForm::deleteElement_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	if (!ML->isListEmpty())
 	{
+		// Устанавливаем режим удаления
 		act = Action::del;
 
+		// Выводим на форму нужные элементы
 		chooseElNumber->Visible = true;
 		chooseElNumber->Enabled = true;
 		labelToPurpose->Visible = true;
@@ -794,6 +854,7 @@ System::Void CourseWork::MyForm::deleteElement_Click(System::Object ^ sender, Sy
 		inputEl->Text = "Удалить элемент";
 		labelToPurpose->Text = "для удаления";
 
+		// Другие элементы прячем
 		dataGridViewForList->Visible = false;
 
 		inputList->Enabled = false;
@@ -843,15 +904,15 @@ System::Void CourseWork::MyForm::deleteElement_Click(System::Object ^ sender, Sy
 	return System::Void();
 }
 
+// Пользователь запрашивает редактирование элементов таблицы
 System::Void CourseWork::MyForm::editElement_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	if (!ML->isListEmpty())
 	{
+		// Устанавливаем режим редактирования
 		act = Action::edit;
 
-		//chooseElNumber->Visible = true;
-		//chooseElNumber->Enabled = true;
-
+		// Показываем нужные элементы формы
 		numberOfEl->Visible = true;
 		numberOfEl->Enabled = true;
 
@@ -866,6 +927,7 @@ System::Void CourseWork::MyForm::editElement_Click(System::Object ^ sender, Syst
 
 		dataGridViewForList->Visible = false;
 
+		// Прячем не нужные элементы формы
 		inputList->Enabled = false;
 		outputList->Enabled = false;
 		readFile->Enabled = false;
@@ -880,6 +942,18 @@ System::Void CourseWork::MyForm::editElement_Click(System::Object ^ sender, Syst
 		deleteElement->Enabled = false;
 		editElement->Enabled = false;
 
+		fName->Enabled = false;
+		fGenre->Enabled = false;
+		fCountry->Enabled = false;
+		fProdYear->Enabled = false;
+		fProducer->Enabled = false;
+		fFormat->Enabled = false;
+		fSound->Enabled = false;
+		fTime->Enabled = false;
+
+		// Заполняем listBox данными из кинотеки, чтобы пользователь мог выбрать элемент для редактирования
+		// Здесь это нужно делать, так как в отличии от запросов на дополнение, удаление и ввод здесь нет checkBox'а
+		// Именно в его обработчике изменения состояния обычно заполняется этот элемент
 		current = ML->getList();
 		int i = 1;
 		numberOfEl->BeginUpdate();
@@ -890,15 +964,6 @@ System::Void CourseWork::MyForm::editElement_Click(System::Object ^ sender, Syst
 			i++;
 		}
 		numberOfEl->EndUpdate();
-
-		fName->Enabled = false;
-		fGenre->Enabled = false;
-		fCountry->Enabled = false;
-		fProdYear->Enabled = false;
-		fProducer->Enabled = false;
-		fFormat->Enabled = false;
-		fSound->Enabled = false;
-		fTime->Enabled = false;
 	}
 	else
 		MessageBox::Show("Список пуст! Прежде чем удалять элементы из таблицы введите её с клавиатуры или загрузите из файла!");
@@ -906,8 +971,10 @@ System::Void CourseWork::MyForm::editElement_Click(System::Object ^ sender, Syst
 	return System::Void();
 }
 
+// Пользователь запрашивает вывод данных по названию фильма
 System::Void CourseWork::MyForm::specialRequest1_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
+	// Выводим на форму требуемые графические элементы
 	specialRequestsPanel->Enabled = true;
 	specialRequestsPanel->Visible = true;
 
@@ -917,6 +984,7 @@ System::Void CourseWork::MyForm::specialRequest1_Click(System::Object ^ sender, 
 	label10->Visible = false;
 	textBox2->Visible = false;
 
+	// Не нужные элементы прячем
 	dataGridViewForList->Visible = false;
 
 	inputList->Enabled = false;
@@ -935,13 +1003,16 @@ System::Void CourseWork::MyForm::specialRequest1_Click(System::Object ^ sender, 
 
 	label9->Text = "Введите название фильма";
 
+	// Устанавливаем режим выполнения индивидуального запроса 1
 	act = Action::sr1;
 
 	return System::Void();
 }
 
+// Пользователь запрашивает вывод фильмов определённого жанра и страны
 System::Void CourseWork::MyForm::specialRequest2_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
+	// Выводим нужные графические элементы
 	specialRequestsPanel->Enabled = true;
 	specialRequestsPanel->Visible = true;
 
@@ -951,6 +1022,7 @@ System::Void CourseWork::MyForm::specialRequest2_Click(System::Object ^ sender, 
 	label10->Visible = true;
 	textBox2->Visible = true;
 
+	// Не нужные прячем
 	dataGridViewForList->Visible = false;
 
 	inputList->Enabled = false;
@@ -970,19 +1042,23 @@ System::Void CourseWork::MyForm::specialRequest2_Click(System::Object ^ sender, 
 	label9->Text = "Укажите жанр фильма";
 	label10->Text = "Введите страну производства фильма";
 
+	// Устанавливаем соответствующий режим
 	act = Action::sr2;
 
 	return System::Void();
 }
 
+// Пользователь запрашивает вывод фильмов определённого режиссёра в алфавитном порядке
 System::Void CourseWork::MyForm::specialRequest3_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
+	// Выводим нужные элементы на форму
 	specialRequestsPanel->Enabled = true;
 	specialRequestsPanel->Visible = true;
 
 	label9->Visible = true;
 	textBox1->Visible = true;
 
+	// Другие элементы прячем
 	label10->Visible = false;
 	textBox2->Visible = false;
 
@@ -1004,11 +1080,13 @@ System::Void CourseWork::MyForm::specialRequest3_Click(System::Object ^ sender, 
 
 	label9->Text = "Укажите режиссёра";
 
+	// Устанавливаем режим выполнения индивидуального запроса номер 3
 	act = Action::sr3;
 
 	return System::Void();
 }
 
+// Пользователь запрашивает вывод диаграммы на экран (количество фильмов каждой страны-производителя)
 System::Void CourseWork::MyForm::specialRequest4_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	if (ML->isListEmpty())
@@ -1017,9 +1095,11 @@ System::Void CourseWork::MyForm::specialRequest4_Click(System::Object ^ sender, 
 		return System::Void();
 	}
 
+	// Выводим на форму диаграммы
 	chartFor4Request->Enabled = true;
 	chartFor4Request->Visible = true;
 
+	// Обновляем диаграмму
 	this->updateDiag();
 
 	specialRequest4->Text = "Обновить диаграмму";
@@ -1027,8 +1107,10 @@ System::Void CourseWork::MyForm::specialRequest4_Click(System::Object ^ sender, 
 	return System::Void();
 }
 
+// Нажате кнопка подтверждения на специальной панели для индивидуальных запросов
 System::Void CourseWork::MyForm::confirmButton_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
+	// Очищаем текстовые поля от лишних пробелов
 	String^ text = textBox1->Text;
 	while (text->Contains("  "))
 		text = text->Replace("  ", " ");
@@ -1039,21 +1121,25 @@ System::Void CourseWork::MyForm::confirmButton_Click(System::Object ^ sender, Sy
 		text = text->Replace("  ", " ");
 	textBox2->Text = text;
 
+	// Следим, чтобы таблица не была пуста
 	if (ML->isListEmpty() == true)
 	{
 		MessageBox::Show("Таблица пуста! Сначала заполните её!");
 		return System::Void();
 	}
 
+	// Следим, чтобы пользователь ввёл все необходимые данные
 	if ( ( String::IsNullOrEmpty(textBox1->Text->ToString()) || textBox1->Text == " " ) ||
 		act == Action::sr2 &&  ( String::IsNullOrEmpty(textBox2->Text->ToString()) || textBox2->Text == " ") )
 	{
 		MessageBox::Show("Введите требуемые данные!");
 		return System::Void();
 	}
-
-	if (act == Action::sr1)
+	// В зависимости от запроса выполняем различные действия
+	if (act == Action::sr1) // Вывод на экран информации о фильме по названию
 	{
+		// Работа функции аналогична работе метода showList()
+
 		head = ML->getList();
 		current = head;
 
@@ -1115,6 +1201,7 @@ System::Void CourseWork::MyForm::confirmButton_Click(System::Object ^ sender, Sy
 			row[Column8] = context.marshal_as<String^>(current->sound);
 			row[Column9] = context.marshal_as<String^>(current->time);
 
+			// Единственное отличие - в таблицу добавляются лишь те элементы, где название фильма совпадает в введённым пользователем
 			if (textBox1->Text->ToString() == row[Column2]->ToString())
 				table->Rows->Add(row);	
 			i++;
@@ -1126,8 +1213,10 @@ System::Void CourseWork::MyForm::confirmButton_Click(System::Object ^ sender, Sy
 
 		current = head;
 	}
-	if (act == Action::sr2)
+	if (act == Action::sr2) // Вывод на экран фильмов определённого жанра и страны
 	{
+		// Работа данной функции аналогична работе предыдущей
+
 		head = ML->getList();
 		current = head;
 
@@ -1189,6 +1278,7 @@ System::Void CourseWork::MyForm::confirmButton_Click(System::Object ^ sender, Sy
 			row[Column8] = context.marshal_as<String^>(current->sound);
 			row[Column9] = context.marshal_as<String^>(current->time);
 
+			// Единственное отличие - более строгое условие - должны совпасть и страна и жанр
 			if (textBox1->Text->ToString() == row[Column3]->ToString() && textBox2->Text->ToString() == row[Column4]->ToString())
 				table->Rows->Add(row);
 			i++;
@@ -1200,14 +1290,16 @@ System::Void CourseWork::MyForm::confirmButton_Click(System::Object ^ sender, Sy
 
 		current = head;
 	}
-	if (act == Action::sr3)
+	if (act == Action::sr3) // Вывод на экран фильмов определённого режиссёра в алфавитном порядке
 	{
+		// Создаём новую временную кинотеку
 		MovieLibrary* tmp = new MovieLibrary;
 		head = ML->getList();
 		current = head;
 
 		std::string standart = context.marshal_as<std::string>(textBox1->Text);
 
+		// Добавляем туда элементы с требуемым именем режиссёра
 		while (current)
 		{
 			if (current->producer == standart)
@@ -1221,12 +1313,15 @@ System::Void CourseWork::MyForm::confirmButton_Click(System::Object ^ sender, Sy
 			current = current->link;
 		}
 
+		// Выводим резальтат на экран
 		if (tmp->isListEmpty())
 			MessageBox::Show("Фильмов этого режиссёра не найдено!");
 		else
 		{
+			// Сортируем временный список
 			tmp->sort();
 
+			// Далее функция работает идентично предыдущим
 			dataGridViewForList->DataSource = NULL;
 
 			int i = 1;
@@ -1293,6 +1388,7 @@ System::Void CourseWork::MyForm::confirmButton_Click(System::Object ^ sender, Sy
 			//Отображаем таблицу в визуальном компоненте
 			dataGridViewForList->DataSource = table;
 
+			// Удаляем временный список
 			tmp->deleteTable();
 			delete tmp;
 			head = ML->getList();
@@ -1300,9 +1396,11 @@ System::Void CourseWork::MyForm::confirmButton_Click(System::Object ^ sender, Sy
 		}
 	}
 
+	// После выполнения любого из запросов прячем связанные с ним элементы панели для индивидуальных запросов
 	specialRequestsPanel->Enabled = false;
 	specialRequestsPanel->Visible = false;
 
+	// Так же выводим на форму прочие элементы
 	dataGridViewForList->Visible = true;
 
 	inputList->Enabled = true;
@@ -1318,17 +1416,21 @@ System::Void CourseWork::MyForm::confirmButton_Click(System::Object ^ sender, Sy
 	addToList->Enabled = true;
 	deleteElement->Enabled = true;
 	editElement->Enabled = true;
-
+	 
+	// Переходим вв режим ожидания команд
 	act = Action::nul;
 
+	// Очищаем текстовые поля
 	textBox1->Clear();
 	textBox1->Clear();
 
 	return System::Void();
 }
 
+// Нажата кнопка отмены на специальной панели для индивидуальных запросов
 System::Void CourseWork::MyForm::cancelButton_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
+	// Прячем элементы формы
 	specialRequestsPanel->Enabled = false;
 	specialRequestsPanel->Visible = false;
 
@@ -1341,6 +1443,7 @@ System::Void CourseWork::MyForm::cancelButton_Click(System::Object ^ sender, Sys
 	label10->Visible = false;
 	textBox2->Visible = false;
 
+	// Выводим на экран другие элементы формы
 	dataGridViewForList->Visible = true;
 
 	inputList->Enabled = true;
@@ -1357,26 +1460,41 @@ System::Void CourseWork::MyForm::cancelButton_Click(System::Object ^ sender, Sys
 	deleteElement->Enabled = true;
 	editElement->Enabled = true;
 
+	// Очищаем текстовые поля
 	textBox1->Clear();
 	textBox1->Clear();
 
+	// Переходим в режим ожидания команд
 	act = Action::nul;
 
 	return System::Void();
 }
 
+// Нажата кнопка выхода
 System::Void CourseWork::MyForm::exitButton_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
+	// Запрашиваем подтверждение
 	System::Windows::Forms::DialogResult ee;
-
 	ee = MessageBox::Show("Выйти из программы?", "Внимание!", MessageBoxButtons::YesNo, MessageBoxIcon::Question);
 	if (ee == System::Windows::Forms::DialogResult::Yes)
 	{
+		// Закрываем форму
 		this->Close();
 	}
 	return System::Void();
 }
 
+// Нажата кнопка "Справка"
+System::Void CourseWork::MyForm::helpButton_Click(System::Object ^ sender, System::EventArgs ^ e)
+{
+	// Выводим подсказки на экран
+	MessageBox::Show("Эта программа разработана для курсовой работы на тему ""Разработка приложения с использованием динамических структур данных"" \nпо курсу Основы Алгоритмизации и ООП \nВыполнил - студент группы 940, Башев К.С.");
+	MessageBox::Show("Для начала работы с программой требуется ввести данные с клавиатуры или загрузить из файла - иначе функционал будет недоступен.");
+	return System::Void();
+}
+
+// Обработчики нажатий клавиш в текстовых полях, для фильтрации запрещённых символов
+	// Поле названия фильма
 System::Void CourseWork::MyForm::fName_KeyPress(System::Object ^ sender, System::Windows::Forms::KeyPressEventArgs ^ e)
 {
 	static int wrongClick = 1;
@@ -1392,6 +1510,7 @@ System::Void CourseWork::MyForm::fName_KeyPress(System::Object ^ sender, System:
 	return System::Void();
 }
 
+	// Поле жанр
 System::Void CourseWork::MyForm::fGenre_KeyPress(System::Object ^ sender, System::Windows::Forms::KeyPressEventArgs ^ e)
 {
 	static int wrongClick = 1;
@@ -1407,6 +1526,7 @@ System::Void CourseWork::MyForm::fGenre_KeyPress(System::Object ^ sender, System
 	return System::Void();
 }
 
+	// Поле страна-производитель
 System::Void CourseWork::MyForm::fCountry_KeyPress(System::Object ^ sender, System::Windows::Forms::KeyPressEventArgs ^ e)
 {
 	static int wrongClick = 1;
@@ -1422,6 +1542,7 @@ System::Void CourseWork::MyForm::fCountry_KeyPress(System::Object ^ sender, Syst
 	return System::Void();
 }
 
+	// Поле год производства
 System::Void CourseWork::MyForm::fProdYear_KeyPress(System::Object ^ sender, System::Windows::Forms::KeyPressEventArgs ^ e)
 {
 	static int wrongClick = 1;
@@ -1437,6 +1558,7 @@ System::Void CourseWork::MyForm::fProdYear_KeyPress(System::Object ^ sender, Sys
 	return System::Void();
 }
 
+	// Поле режиссёр
 System::Void CourseWork::MyForm::fProducer_KeyPress(System::Object ^ sender, System::Windows::Forms::KeyPressEventArgs ^ e)
 {
 	static int wrongClick = 1;
@@ -1452,6 +1574,7 @@ System::Void CourseWork::MyForm::fProducer_KeyPress(System::Object ^ sender, Sys
 	return System::Void();
 }
 
+	// Поле качество
 System::Void CourseWork::MyForm::fFormat_KeyPress(System::Object ^ sender, System::Windows::Forms::KeyPressEventArgs ^ e)
 {
 	static int wrongClick = 1;
@@ -1467,6 +1590,7 @@ System::Void CourseWork::MyForm::fFormat_KeyPress(System::Object ^ sender, Syste
 	return System::Void();
 }
 
+	// Поле звук
 System::Void CourseWork::MyForm::fSound_KeyPress(System::Object ^ sender, System::Windows::Forms::KeyPressEventArgs ^ e)
 {
 	static int wrongClick = 1;
@@ -1482,6 +1606,7 @@ System::Void CourseWork::MyForm::fSound_KeyPress(System::Object ^ sender, System
 	return System::Void();
 }
 
+	// Поле длительность
 System::Void CourseWork::MyForm::fTime_KeyPress(System::Object ^ sender, System::Windows::Forms::KeyPressEventArgs ^ e)
 {
 	static int wrongClick = 1;
@@ -1497,11 +1622,13 @@ System::Void CourseWork::MyForm::fTime_KeyPress(System::Object ^ sender, System:
 	return System::Void();
 }
 
+	// Поле 1 для индивидуальных запросов
 System::Void CourseWork::MyForm::textBox1_KeyPress(System::Object ^ sender, System::Windows::Forms::KeyPressEventArgs ^ e)
 {
 	static int wrongClick = 1;
 	Char c = e->KeyChar;
 	
+	// Здесь в зависимости от запросов стоят разные фильтры, соответствующие фильтрам других текстовых полей
 	if (act == Action::sr1)
 	{
 		if (c != 8 && c != ' ' && c != ':' && c != '.' && c != ',' && c != '-' && c != '!' && c != '?' && !Char::IsLetter(c) && !Char::IsControl(c) && !Char::IsDigit(c))
@@ -1527,10 +1654,12 @@ System::Void CourseWork::MyForm::textBox1_KeyPress(System::Object ^ sender, Syst
 	return System::Void();
 }
 
+	// Поле 2 для индивидуальных запросов
 System::Void CourseWork::MyForm::textBox2_KeyPress(System::Object ^ sender, System::Windows::Forms::KeyPressEventArgs ^ e)
 {
 	static int wrongClick = 1;
 	Char c = e->KeyChar;
+	// Поле два открывается при выполнении лишь одного запроса - поэтому его фильтр соответствует фильтру страны-производителя
 	if (c != 8 && c != ' '  && c != '-' && !Char::IsLetter(c) && !Char::IsControl(c))
 	{
 		e->Handled = true;
@@ -1542,20 +1671,25 @@ System::Void CourseWork::MyForm::textBox2_KeyPress(System::Object ^ sender, Syst
 	return System::Void();
 }
 
+	// Поставлена или убрана галочка в checkBox - пользователь хочет выбрать элемент для удаления/редактирования/дополнения или наоборот скрыть listBox
 System::Void CourseWork::MyForm::chooseElNumber_CheckedChanged(System::Object ^ sender, System::EventArgs ^ e)
 {
+	// Стираем старое выделение в listBox
 	numberOfEl->ClearSelected();
 	numberOfEl->Items->Clear();
 
+	// Пользователь хочет выбрать конкретный элемент (checkBox установлен в true)
 	if (chooseElNumber->Checked)
 	{
+		// Делаем listBox видиммым
 		numberOfEl->Visible = true;
 		numberOfEl->Enabled = true;
 
+		// Заполняем его
 		current = ML->getList();
 		int i = 1;
 		numberOfEl->BeginUpdate();
-		if(act == Action::add)
+		if(act == Action::add) // При режиме добавления записываем первым элементом значение для добавления в начало списка
 			numberOfEl->Items->Add("Добавить в начало списка");
 		while (current)
 		{
@@ -1565,8 +1699,9 @@ System::Void CourseWork::MyForm::chooseElNumber_CheckedChanged(System::Object ^ 
 		}
 		numberOfEl->EndUpdate();
 	}
-	else
+	else // Если пользователь наоборот хочет скрыть listBox
 	{
+		// Прячем его
 		numberOfEl->Visible = false;
 		numberOfEl->Enabled = false;
 	}
@@ -1574,12 +1709,16 @@ System::Void CourseWork::MyForm::chooseElNumber_CheckedChanged(System::Object ^ 
 	return System::Void();
 }
 
+	// Изменён выбранный элемент в listBox
 System::Void CourseWork::MyForm::numberOfEl_SelectedIndexChanged(System::Object ^ sender, System::EventArgs ^ e)
 {
+	// Инициализируем специальную переменную для хранения номера выбранного элемента
 	selectedIndex = numberOfEl->SelectedIndex + 1;
 
+	// В зависимости от режима работы выводим на форму некоторые данные и элементы
 	if (act == Action::edit)
 	{
+		// Даём доступ к текстовым полям, требуемым для редактирования
 		fName->Enabled = true;
 		fGenre->Enabled = true;
 		fCountry->Enabled = true;
@@ -1589,6 +1728,7 @@ System::Void CourseWork::MyForm::numberOfEl_SelectedIndexChanged(System::Object 
 		fSound->Enabled = true;
 		fTime->Enabled = true;
 
+		// Выводим на эти поля информацию о выбранном для редактировния элементе
 		Movie* m = ML->getElAt(selectedIndex);
 		if (m != NULL)
 		{

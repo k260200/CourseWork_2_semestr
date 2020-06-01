@@ -99,6 +99,7 @@ namespace CourseWork {
 	private: System::Windows::Forms::Button^  outputList;
 	private: System::Windows::Forms::Button^  rewriteFile;
 	private: System::Windows::Forms::Button^  readFile;
+	private: System::Windows::Forms::Button^  helpButton;
 
 		
 	public:
@@ -173,6 +174,7 @@ namespace CourseWork {
 			this->chartFor4Request = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
 			this->saveFileDialog1 = (gcnew System::Windows::Forms::SaveFileDialog());
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
+			this->helpButton = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewForList))->BeginInit();
 			this->inputListPanel->SuspendLayout();
 			this->specialRequestsPanel->SuspendLayout();
@@ -627,11 +629,22 @@ namespace CourseWork {
 			this->openFileDialog1->FileName = L"openFileDialog1";
 			this->openFileDialog1->Filter = L"Текстовые файлы |*.txt";
 			// 
+			// helpButton
+			// 
+			this->helpButton->Location = System::Drawing::Point(12, 563);
+			this->helpButton->Name = L"helpButton";
+			this->helpButton->Size = System::Drawing::Size(177, 23);
+			this->helpButton->TabIndex = 26;
+			this->helpButton->Text = L"Справка";
+			this->helpButton->UseVisualStyleBackColor = true;
+			this->helpButton->Click += gcnew System::EventHandler(this, &MyForm::helpButton_Click);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1330, 650);
+			this->Controls->Add(this->helpButton);
 			this->Controls->Add(this->chartFor4Request);
 			this->Controls->Add(this->exitButton);
 			this->Controls->Add(this->specialRequestsPanel);
@@ -683,7 +696,7 @@ private: System::Void chooseElNumber_CheckedChanged(System::Object^  sender, Sys
 private: System::Void numberOfEl_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e);
 
 		// Обработчики нажатий кнопок
-			// Подтвердить ввод элемента для ввода/удаления/добавления/редактирования
+			// Подтвердить ввод элемента для ввода/удаления/добавления/редактирования на специальной панели
 private: System::Void inputEl_Click(System::Object^  sender, System::EventArgs^  e);
 
 			// Нажатие кнопок вывода на экран, сохранения и загрузки а так же ввода списка с клавиатуры соответственно
@@ -692,7 +705,7 @@ private: System::Void rewriteFile_Click(System::Object^  sender, System::EventAr
 private: System::Void readFile_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void inputList_Click(System::Object^  sender, System::EventArgs^  e);
 
-			// Прекратить действие (для добавления, удаления, ввода с клавиатуры и редактирования)
+			// Кнопка рекратить действие на специальной панели (для добавления, удаления, ввода с клавиатуры и редактирования)
 private: System::Void stopInputList_Click(System::Object^  sender, System::EventArgs^  e);
 
 			// Нажатие кнопок дополнить, удалить и редактировать элемент таблицы соответственно
@@ -706,11 +719,14 @@ private: System::Void specialRequest2_Click(System::Object^  sender, System::Eve
 private: System::Void specialRequest3_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void specialRequest4_Click(System::Object^  sender, System::EventArgs^  e);
 
-			// Нажатие кнопок подтверждения и отмены при выполнении индивидуальных запросов
+			// Нажатие кнопок подтверждения и отмены на специальной панели при выполнении индивидуальных запросов
 private: System::Void confirmButton_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void cancelButton_Click(System::Object^  sender, System::EventArgs^  e);
 		 
 			// Нажатие кнопки выхода
 private: System::Void exitButton_Click(System::Object^  sender, System::EventArgs^  e);
+
+			// Вывод подсказки
+private: System::Void helpButton_Click(System::Object^  sender, System::EventArgs^  e);
 };
 }
