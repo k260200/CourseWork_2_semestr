@@ -2,28 +2,31 @@
 
 #include <vector>
 #include <string>
-#include "MovieLibrary.h"
+
+#include "MovieLibrary.h" // ѕодключаем класс дл€ доступа к кинотеке
 
 using namespace std;
 
+//  ласс дл€ анализа количества фильмов от каждой страны-производител€
 class dataCounter
 {
 public:
-	dataCounter(Movie* );
+	dataCounter(Movie* ); //  онструктор, принимающий указатель на список фильмов, по которому должна составл€тьс€ выборка
 	~dataCounter();
 
-	int analyse();
-	void clear();
-	int getAmountOfStats();
-	string getStatAt(int);
-	int getPointAt(int);
+	int analyse(); // ќбработка данных, составление выборки
+	void clear(); // ”даление выборки
+	int getAmountOfStats(); // ѕолучить количество стран-производителей в выборке
+	string getStatAt(int); // ѕолучить название определЄнной страны-производител€ из выборки
+	int getPointAt(int); // ѕолучить количество фильмов, произведЄнных в указанной стране
 
 private:
-	Movie* head;
-	int amountOfStats;
-	vector<string> stats;
-	vector<int> points;
+	Movie* head; // ”казатель на список фильмов
+	int amountOfStats; //  оличество стран=производителей в выборке
+	vector<string> stats; // ƒинамический массив, содержащий названи€ стран-производителей
+	vector<int> points; // ƒинамический массив, содержащий сведени€ о количестве фильмов от каждой страны в выборке
 
-	int thereIsSameStat(string);
+	int thereIsSameStat(string); // —лужебна€ функци€ дл€ проверки уникальности указанной страны
+								 // ¬озвращает номер этой страны в выборке, если она уже встречалась
 };
 

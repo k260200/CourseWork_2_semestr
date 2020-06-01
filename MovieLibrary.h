@@ -1,12 +1,11 @@
 #pragma once
 #include "stdafx.h"
-#include <iostream>
 #include <string>
-#include "conio.h"
 #include <fstream>
 
 using namespace std;
 
+ // Структура для описания одного фильма из кинотеки
 struct Movie {
 	string name; // Название
 	string genre; // Жанр
@@ -17,54 +16,42 @@ struct Movie {
 	string sound; // Звук
 	string time; // Продолжительность
 
-	Movie* link;
+	Movie* link; // Указатель на следующий элемент списка
 };
 
+ // Класс для работы с кинотекой
+ // Реализует основной функционал базы данных в этой программе
 class MovieLibrary
 {
 public:
 	MovieLibrary();
 	~MovieLibrary();
 
-	//void showMovie(Movie*); // ###
-
 	int setElAt(Movie, int); // Присваивает указанному элементу переданное значение 
 	Movie* getElAt(int); // Возвращает указатель на указанный элемент списка
 	Movie* getList(); // Возвращает указатель на начало списка
 	bool isListEmpty(); // Говорит, пуст ли список
 
-	//void enterList(); // Ввести таблицу с клавиатуры ###
-	//void showList(); // Вывести таблицу на экран ###
-	int saveList(); // Сохранить таблицу в файл
-	int loadList(); // Загрузить таблицу из файла
-	void setFileName(string);
+	int saveList(); // Сохранить список в файл
+	int loadList(); // Загрузить список из файла
+	void setFileName(string); // Установить имя файла
 	
-	void createFirstFilm(Movie); // Добавить первый элемент
-	void addFilm(Movie); // Добавить фильм (в конец)
+	void createFirstFilm(Movie); // Создать первый элемент списка
+	void addFilm(Movie); // Добавить фильм (в конец списка)
 	int addFilm(Movie, int); // Добавить фильм после указанного
-	int addFirstFilm(Movie); // Добавить фильм в начало
-	//void addFilm(); // ###
+	int addFirstFilm(Movie); // Добавить фильм в начало списка
 
-	//int deleteFirstFilm(); // Удаляет первый фильм
 	int deleteFilm(int); // Удаляет указанный фильм
 	int deleteLastFilm(); // Удаляет последний фильм
 	void deleteTable(); // Удаляет таблицу целиком
 
-	void swap(Movie*, Movie*); // Поменять два элемента местами
-	void sort(); // Отсортировать таблицу
-
-	//void editFilm(string); // редактирует фильм с введённым названием
-
-	//Movie* getInfo(string); // Возвращает информацию о фильме с введённым названием
-	//Movie* getInfo(string, string); // Возвращает информацию о фильме с определёнными жанром и страной
-	//Movie* getSortedList(string); // Возвращает отсортированный список определённого режиссёра
-	//void diag(); // Диаграмма
+	void sort(); // Отсортировать список в алфавитном порядке по названию фильма
 
 private:
-	string fileName;
-	Movie* head;
-	bool isEmpty;
+	string fileName; // Имя файла
+	Movie* head; // Указатель на начало списка
+	bool isEmpty; // Флаг - пуст ли список
 
-	//System::Windows::Forms::MyForm^ mf;
+	void swap(Movie*, Movie*); // Поменять два элемента местами
 };
 

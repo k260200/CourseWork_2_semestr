@@ -520,7 +520,7 @@ System::Void CourseWork::MyForm::rewriteFile_Click(System::Object ^ sender, Syst
 {
 	System::Windows::Forms::DialogResult ee;
 
-	ee = MessageBox::Show("Сохранить таблицу в новом файле? (по умолчанию будет перезаписан указанный ранее файл)", "Внимание!", MessageBoxButtons::YesNo, MessageBoxIcon::Question);
+	ee = MessageBox::Show("Сохранить таблицу в новом файле? (по умолчанию будет перезаписан указанный ранее файл или файл database.txt)", "Внимание!", MessageBoxButtons::YesNo, MessageBoxIcon::Question);
 	if (ee == System::Windows::Forms::DialogResult::Yes)
 		if (saveFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 		{
@@ -555,7 +555,7 @@ System::Void CourseWork::MyForm::readFile_Click(System::Object ^ sender, System:
 {
 	System::Windows::Forms::DialogResult ee;
 
-	ee = MessageBox::Show("Загрузить таблицу из нового файла? (по умолчанию таблица будет загружена из указанного ранее файла)", "Внимание!", MessageBoxButtons::YesNo, MessageBoxIcon::Question);
+	ee = MessageBox::Show("Загрузить таблицу из нового файла? (по умолчанию таблица будет загружена из указанного ранее файла или из файла database.txt)", "Внимание!", MessageBoxButtons::YesNo, MessageBoxIcon::Question);
 	if (ee == System::Windows::Forms::DialogResult::Yes)
 		if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 		{
@@ -1372,7 +1372,7 @@ System::Void CourseWork::MyForm::exitButton_Click(System::Object ^ sender, Syste
 	ee = MessageBox::Show("Выйти из программы?", "Внимание!", MessageBoxButtons::YesNo, MessageBoxIcon::Question);
 	if (ee == System::Windows::Forms::DialogResult::Yes)
 	{
-		exit(0);
+		this->Close();
 	}
 	return System::Void();
 }

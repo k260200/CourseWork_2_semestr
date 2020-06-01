@@ -1,38 +1,23 @@
-//#include "stdafx.h"
-//
-//using namespace System;
-//
-//int main(array<System::String ^> ^args)
-//{
-//    return 0;
-//}
-
+// Точка входа приложения
 
 #include "stdafx.h"
 #include <iostream>
-#include "MyForm.h"
 
-//#include "dataCounter.h"
-
-//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup");
+#include "MyForm.h" // Подключаем класс для работы с интерфейсом
 
 using namespace System;
 using namespace System::Windows::Forms;
 using namespace CourseWork;
 
 [STAThread]
-//int main(array<System::String ^> ^args)
 int main(cli::array < String^> ^ args)
 {
+	// Создаём кинотеку
 	MovieLibrary ml;
-	//ml.loadList();
-	//dataCounter dc(ml.getList());
-	//dc.analyse();
-	//for (int i = 0; i < dc.getAmountOfStats(); ++i)
-	//	std::cout << dc.getStatAt(i) << " - " << dc.getPointAt(i) << std::endl;
+
+	// Создаём интерфейс
 	Application::EnableVisualStyles();
 	Application::Run(gcnew MyForm(&ml));
 
-	//system("pause");
 	return 0;
 }

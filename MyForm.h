@@ -6,10 +6,10 @@
 #include <string>
 #include "Windows.h"
 
-#include <msclr\marshal_cppstd.h>
+#include <msclr\marshal_cppstd.h> // Библиотека для преобразования типов из управляемых в обычные и наоборот (System::String^ в std::string например)
 
-#include "MovieLibrary.h"
-#include "dataCounter.h"
+#include "MovieLibrary.h" // Подключаем класс для доступа к кинотеке
+#include "dataCounter.h" // Подключаем класс для анализа фильмов каждой страны производителя
 
 namespace CourseWork {
 
@@ -22,20 +22,38 @@ namespace CourseWork {
 	using namespace System::Data;
 	using namespace System::Drawing;
 
+	// Создаём перечисление, обозначающее выбранное пользователем действие
+	/*
+	nul - не выбрано
+	inp - ввод данных с клавиатуры
+	add - добавить элементы
+	del - удалить элементы
+	edit - редактировать элементы
+	sr1-4 - индивидуальные задания 1-4 соответственно
+	*/
 	public enum class Action { nul, inp, add, del, edit, sr1, sr2, sr3, sr4 };
 
 	/// <summary>
 	/// Сводка для MyForm
 	/// </summary>
+	// Класс для работы с gui
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
 		// Мои поля
 	private:
-		int selectedIndex;
-		Action act;
-		MovieLibrary* ML;
-		Movie* current;
-		Movie* head;
+		int selectedIndex; // Номер выбранного пользователем элемента (для редактирования, дополнения или удаления)
+		Action act; // Переменная, хранящяя вседения о выбранном пользователем действии
+		MovieLibrary* ML; // Экземпляр класса MovieLibrary для работы со списком фильмов
+		Movie* current; // Указатель на текущий элемент списка
+		Movie* head; // Указатель на начало списка
+		msclr::interop::marshal_context context; // Экземпляр класса marshal_context класса для преобразования типов
+
+		//Мои методы
+	private:
+		void showList(); // Вывод списка на экран
+		void updateDiag(); // Обновить данные для диаграммы
+
+		// Элементы формы
 	private: System::Windows::Forms::Button^  specialRequest1;
 	private: System::Windows::Forms::Button^  specialRequest2;
 	private: System::Windows::Forms::Button^  specialRequest3;
@@ -51,13 +69,6 @@ namespace CourseWork {
 	private: System::Windows::Forms::DataVisualization::Charting::Chart^  chartFor4Request;
 	private: System::Windows::Forms::SaveFileDialog^  saveFileDialog1;
 	private: System::Windows::Forms::OpenFileDialog^  openFileDialog1;
-			 msclr::interop::marshal_context context;
-	
-		//Мои методы
-	private:
-		void showList();
-		void updateDiag();
-	public:
 	private: System::Windows::Forms::Panel^  inputListPanel;
 	private: System::Windows::Forms::Button^  stopInputList;
 	private: System::Windows::Forms::Button^  inputList;
@@ -75,20 +86,8 @@ namespace CourseWork {
 	private: System::Windows::Forms::Label^  labelToPurpose;
 	private: System::Windows::Forms::CheckBox^  chooseElNumber;
 	private: System::Windows::Forms::ListBox^  numberOfEl;
-
 	private: System::Windows::Forms::DataGridView^  dataGridViewForList;
-
-	public:
-		MyForm(MovieLibrary* list);
-
-	protected:
-		/// <summary>
-		/// Освободить все используемые ресурсы.
-		/// </summary>
-		~MyForm();
-
 	private: System::Windows::Forms::TextBox^  fName;
-	protected:
 	private: System::Windows::Forms::TextBox^  fGenre;
 	private: System::Windows::Forms::TextBox^  fCountry;
 	private: System::Windows::Forms::TextBox^  fProdYear;
@@ -101,8 +100,15 @@ namespace CourseWork {
 	private: System::Windows::Forms::Button^  rewriteFile;
 	private: System::Windows::Forms::Button^  readFile;
 
+		
+	public:
+		MyForm(MovieLibrary* list); // Прототип конструктора класса
 
-
+	protected:
+		/// <summary>
+		/// Освободить все используемые ресурсы.
+		/// </summary>
+		~MyForm(); // Прототип деструктора класса
 
 	private:
 		/// <summary>
@@ -115,6 +121,8 @@ namespace CourseWork {
 		/// Требуемый метод для поддержки конструктора — не изменяйте 
 		/// содержимое этого метода с помощью редактора кода.
 		/// </summary>
+		// Специальный метод, создающий указанные объекты на форме при запуске программы
+		// Эта часть программы заполняется автоматически средой разработки Visual Studio
 		void InitializeComponent(void)
 		{
 			System::Windows::Forms::DataVisualization::Charting::ChartArea^  chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
@@ -653,6 +661,8 @@ namespace CourseWork {
 
 		}
 #pragma endregion
+	// Обработчики событий формы (их прототипы)
+		// Обработчики нажатий клавиш в TextBox'ах (текстовых полях) - предназначены для фильтрации вводимой пользователем информации
 private: System::Void fName_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
 private: System::Void fGenre_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
 private: System::Void fCountry_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
@@ -664,34 +674,43 @@ private: System::Void fTime_KeyPress(System::Object^  sender, System::Windows::F
 private: System::Void textBox1_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
 private: System::Void textBox2_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e);
 
-
+		// Обработчик изменения состояния chexkBox'а - выбирает ли пользователь конкретный элемент для удаления/добавления/редактирования
+			// Срабатывает, если пользователь ставит галочку (заполняет listBox списком элементов, доступных для удаления/добавления/редактирования)
 private: System::Void chooseElNumber_CheckedChanged(System::Object^  sender, System::EventArgs^  e);
 
+		// Обработчик изменения выделения в listBox (отображает список элементов, доступных для удаления/добавления/редактирования)
+			// Срабатывает, если изменяется выделение - запоминает номер выделенного элемента
 private: System::Void numberOfEl_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e);
 
-
+		// Обработчики нажатий кнопок
+			// Подтвердить ввод элемента для ввода/удаления/добавления/редактирования
 private: System::Void inputEl_Click(System::Object^  sender, System::EventArgs^  e);
 
+			// Нажатие кнопок вывода на экран, сохранения и загрузки а так же ввода списка с клавиатуры соответственно
 private: System::Void outputList_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void rewriteFile_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void readFile_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void inputList_Click(System::Object^  sender, System::EventArgs^  e);
 
+			// Прекратить действие (для добавления, удаления, ввода с клавиатуры и редактирования)
 private: System::Void stopInputList_Click(System::Object^  sender, System::EventArgs^  e);
+
+			// Нажатие кнопок дополнить, удалить и редактировать элемент таблицы соответственно
 private: System::Void addToList_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void deleteElement_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void editElement_Click(System::Object^  sender, System::EventArgs^  e);
 
-
+			// Нажатие кнопок для выполнения индивидуальных запросов
 private: System::Void specialRequest1_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void specialRequest2_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void specialRequest3_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void specialRequest4_Click(System::Object^  sender, System::EventArgs^  e);
 
+			// Нажатие кнопок подтверждения и отмены при выполнении индивидуальных запросов
 private: System::Void confirmButton_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void cancelButton_Click(System::Object^  sender, System::EventArgs^  e);
-
-
+		 
+			// Нажатие кнопки выхода
 private: System::Void exitButton_Click(System::Object^  sender, System::EventArgs^  e);
 };
 }

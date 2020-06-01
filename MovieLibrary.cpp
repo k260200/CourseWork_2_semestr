@@ -17,28 +17,18 @@ MovieLibrary::~MovieLibrary()
 	this->deleteTable();
 }
 
-//void MovieLibrary::showMovie(Movie *m)
-//{
-//	cout << "Название - " << m->name << endl;
-//	cout << "Жанр - " <<m->genre << endl;
-//	cout << "Страна - " << m->country << endl;
-//	cout << "Год производства - " << m->productionYear << endl;
-//	cout << "Режиссёр - " << m->producer << endl;
-//	cout << "Качество - " << m->format << endl;
-//	cout << "Звук - " << m->sound << endl;
-//	cout << "Время - " << m->time << endl;
-//}
-
+// Присваивает указанному элементу переданное значение 
 int MovieLibrary::setElAt(Movie m, int index)
 {
-	if (!isEmpty)
+	if (!isEmpty) // Если список не пуст
 	{
-		Movie* current = head;
-		int i = 1;
-		while (current && i <= index)
+		Movie* current = head; // Устанавливаем указатель на начало списка
+		int i = 1; // Индекс текущего элемента (нумерация с 1)
+		while (current && i <= index) // Пока не достигнем конца списка или не наткнёмся на нужный элемент
 		{
-			if (i == index)
+			if (i == index) // Нашли эл-т
 			{
+				// Присваиваем ему переданное значение, link не трогаем
 				current->name = m.name;
 				current->genre = m.genre;
 				current->country = m.country;
@@ -48,128 +38,68 @@ int MovieLibrary::setElAt(Movie m, int index)
 				current->sound = m.sound;
 				current->time = m.time;
 
+				// Выходим
 				return 0;
 			}
-			current = current->link;
-			i++;
+			current = current->link; // Переходим к следующему элементу списка
+			i++; // Инкрементируем счётчик
 		}
-		return 2;
+		return 2; // Возвращаем значение, если элемент не найден
 	}
-	return 1;
+	return 1; // Возвращаем значение, если список пуст
 }
 
+// Возвращает указатель на указанный элемент списка
 Movie * MovieLibrary::getElAt(int index)
 {
-	if (!isEmpty)
+	if (!isEmpty) // Если список не пуст
 	{
 		if (index == 1)
-			return head;
+			return head; // Возвращаем начало списка (1-ый его эл-т)
 		else
 		{
+			// Ищем указанный элемент
 			Movie* current = head;
 			int i = 1;
 			while (current && i <= index)
 			{
-				if (i == index)
-					return current;
+				if (i == index) // Нашли
+					return current; // Возвращаем его и выходим
 				current = current->link;
 				i++;
 			}
-			return NULL;
+			return NULL; // Возвращаем NULL, если эл-т не найден
 		}
 	}
-	return NULL;
+	return NULL; // Так же возвращаем NULL, если список пуст
 }
 
+// Возвращает указатель на начало списка
 Movie * MovieLibrary::getList()
 {
 	return head;
 }
 
+// Говорит, пуст ли список
 bool MovieLibrary::isListEmpty()
 {
-	return isEmpty;
+	return isEmpty; // Возвращаем флаг
 }
 
-//void MovieLibrary::enterList()
-//{
-//	int i = 1;
-//	Movie* tmp = NULL;
-//	Movie* current = head;
-//	char stop = 0;
-//	do
-//	{
-//		tmp = new Movie;
-//
-//		cout << endl << "Введите " << i << " элемент:" << endl;
-//
-//		cout << "Название: "; cin >> tmp->name;
-//		cout << "Жанр: "; cin >> tmp->genre;
-//		cout << "Страна: "; cin >> tmp->country;
-//		cout << "Год производства: "; cin >> tmp->productionYear;
-//		cout << "Режиссёр: "; cin >> tmp->producer;
-//		cout << "Качество: "; cin >> tmp->format;
-//		cout << "Звук: "; cin >> tmp->sound;
-//		cout << "Время: "; cin >> tmp->time;
-//		tmp->link = NULL;
-//
-//		if (current != NULL)
-//		{
-//			current->link = tmp;
-//			current = tmp;
-//		}
-//		else
-//			current = head = tmp;
-//			
-//		i++;
-//
-//		cout << "Продолжить? (y/n)";
-//		stop = _getch();
-//	} while (stop != 'n');
-//
-//	isEmpty = false;
-//	cout << endl;
-//}
-
-//void MovieLibrary::showList()
-//{
-//	if (isEmpty)
-//		cout << "Список пуст! " << endl;
-//	else
-//	{
-//		int i = 1;
-//		Movie* current = head;
-//		while (current)
-//		{
-//			cout << i << ": " << endl;
-//			showMovie(current);
-//			/*cout << "Название - " << current->name << endl;
-//			cout << "Жанр - " << current->genre << endl;
-//			cout << "Страна - " << current->country << endl;
-//			cout << "Год производства - " << current->productionYear << endl;
-//			cout << "Режиссёр - " << current->producer << endl;
-//			cout << "Качество - " << current->format << endl;
-//			cout << "Звук - " << current->sound << endl;
-//			cout << "Время - " << current->time << endl;*/
-//
-//			i++;
-//			current = current->link;
-//		}
-//	}
-//}
-
+// Сохранить список в файл
 int MovieLibrary::saveList()
 {
-	if (isEmpty)
-		return 2;
+	if (isEmpty) // Если список пуст
+		return 2; // Возвращаем код ошибки
 	else
 	{
-		ofstream file(fileName);
+		ofstream file(fileName); // Открываем файл для записи
 
-		if (!file.is_open())
-			return 1;
+		if (!file.is_open()) // Если не удалось открыть файл
+			return 1; // Возвращаем код ошибки
 		else
 		{
+			// Записываем список в файл
 			Movie* current = head;
 			while (current)
 			{
@@ -181,37 +111,42 @@ int MovieLibrary::saveList()
 				file << current->format << endl;
 				file << current->sound << endl;
 				if (current->link == NULL)
-					file << current->time;
+					file << current->time; // После последнего элемента не делаем перенос на следующую строку
 				else
-					file << current->time << endl;
+					file << current->time << endl; // После остальных - делаем
 
 				current = current->link;
 			}
-			file.close();
+			file.close(); // Закрываем файл
 		}
 	}
-	return 0;
+	return 0; // Возвращаем 0 при успешной перезаписи файла
 }
 
+// Загрузить список из файла
 int MovieLibrary::loadList()
 {
-	ifstream file(fileName);
+	ifstream file(fileName); // Открываем файл для чтения
 
-	if (!file.is_open())
+	if (!file.is_open()) // Не удалось открыть файл
 	{
+		// Закрываем файл и сообщаем об ошибке
 		file.close();
 		return 1;
 	}
-	else if (file.peek() == -1 || file.peek() == 0)
+	else if (file.peek() == -1 || file.peek() == 0) // Файл пуст
 	{
+		// Закрываем файл, сообщаем, что он пуст
 		file.close();
 		return 2;
 	}
-	else
+	else // Данные можно считывать
 	{
+		// Если список уже заполнен
 		if (!(isEmpty && head == NULL))
-			this->deleteTable();
+			this->deleteTable(); // Удаляем его во избежание утечек
 
+		// Считываем файл построчко
 		Movie* tmp = NULL;
 		Movie* current = head;
 		while (!file.eof())
@@ -229,28 +164,31 @@ int MovieLibrary::loadList()
 			
 			tmp->link = NULL;
 
-			if (current != NULL)
+			if (current != NULL) // При считывании обычных элементов
 			{
-				current->link = tmp;
-				current = tmp;
+				current->link = tmp; // Устанавливаем link текущего узла на только что считанный
+				current = tmp; // Делаем только что считанный узел текущим
 			}
-			else
-				current = head = tmp;
+			else // При считывании первого элемента
+				current = head = tmp; // Присваиваем указателю на началов списка и указателю на текущий элемент 
+									  //адрес только что считанного узла
 		}
 
-		isEmpty = false;
+		isEmpty = false; // Устанавливаем флаг (список больше не пуст)
 
-		file.close();
+		file.close(); // Закрываем файл
 	}
 
-	return 0;
+	return 0; // Возвращаем код успешного завершения работы функции
 }
 
+// Установить имя файла (по умолчанию это database.txt)
 void MovieLibrary::setFileName(string newFileName)
 {
 	fileName = newFileName;
 }
 
+// Создать первый элемент списка
 void MovieLibrary::createFirstFilm(Movie m)
 {
 	head = new Movie;
@@ -266,16 +204,18 @@ void MovieLibrary::createFirstFilm(Movie m)
 	isEmpty = false;
 }
 
+// Добавить фильм (в конец списка)
 void MovieLibrary::addFilm(Movie m)
 {
-	if (!isEmpty)
+	if (!isEmpty) // Если список не пуст
 	{
 		Movie* current = head;
 		Movie* tmp = NULL;
-		while (current->link)
+		while (current->link) // Проходим до конца списка
 		{
 			current = current->link;
 		}
+		// Выделяем память под новый элемент и инициализируем его
 		tmp = new Movie;
 		tmp->name = m.name;
 		tmp->genre = m.genre;
@@ -286,30 +226,32 @@ void MovieLibrary::addFilm(Movie m)
 		tmp->sound = m.sound;
 		tmp->time = m.time;
 		tmp->link = NULL;
-		
-		tmp->link = NULL;
 
+		// Устанавливаем link текущего элемента на новосозданный узел
 		current->link = tmp;
 	}
 }
 
+// Добавить фильм после указанного
 int MovieLibrary::addFilm(Movie m, int indexToAddAfter)
 {
-	if (isEmpty)
-		return 1;
+	if (isEmpty) // Если список пуст
+		return 1; // Возвращаем код ошибки
 	else
 	{
-		int i = 1;
-		bool found = false;
-		Movie* current = head;
-		while (current && !found)
+		int i = 1; // Устанавливаем счётчик на 1
+		bool found = false; // Устанавливаем флаг в false
+		Movie* current = head; // Устанавливаем указатель на начало списка
+		while (current && !found) // Пока не конец списка или пока не найден элемент
 		{
-			if (i == indexToAddAfter)
+			if (i == indexToAddAfter) // Номер элемента совпал с искомым
 			{
+				// Выделяем память под новый узел списка
 				Movie* tmp = new Movie;
-				tmp->link = current->link;
-				current->link = tmp;
-
+				tmp->link = current->link; // Устанавливаем link новосозданного узла на эл-т, следующий за текущим
+				current->link = tmp; // Устанавливаем link текущего узла на новосозданный эл-т
+				
+				// Инициализируем новосозданный эл-т переданным значением
 				tmp->name = m.name;
 				tmp->genre = m.genre;
 				tmp->country = m.country;
@@ -319,28 +261,32 @@ int MovieLibrary::addFilm(Movie m, int indexToAddAfter)
 				tmp->sound = m.sound;
 				tmp->time = m.time;
 
+				// Устанавливаем флаг в true для выхода из цикла
 				found = true;
 			}
-			i++;
-			current = current->link;
+			i++; // Увеличиваем счётчик
+			current = current->link; // Переходим к следующему элементу
 		}
-		if (!found)
-			return 2;
+		if (!found) // Если элемент так и не был найден
+			return 2; // Возвращаем код ошибки
 	}
 
-	return 0;
+	return 0; // Сообщаем об успешном завершении функции
 }
 
+// Добавить фильм в начало списка
 int MovieLibrary::addFirstFilm(Movie m)
 {
 	if (isEmpty)
-		return 1;
+		return 1; // Сообщаем, что список пуст
 	else
 	{
+		// Выделяем памято под новый эл-т
 		Movie* tmp = new Movie;
-		tmp->link = head;
-		head = tmp;
-
+		tmp->link = head; // Устанавливаем его link на начало списка
+		head = tmp; // Передаём в указатель на начало списка адрес нового эл-та
+		
+		// Инициализируем этот эл-т переданным значением
 		tmp->name = m.name;
 		tmp->genre = m.genre;
 		tmp->country = m.country;
@@ -351,95 +297,71 @@ int MovieLibrary::addFirstFilm(Movie m)
 		tmp->time = m.time;
 	}
 
-	return 0;
+	return 0; // Сообщаем, что функция отработала успешно
 }
 
-//void MovieLibrary::addFilm()
-//{
-//	if (isEmpty)
-//		cout << "Список пуст!" << endl;
-//	else
-//	{
-//		Movie* current = head;
-//		Movie* tmp = NULL;
-//		while (current->link)
-//		{
-//			current = current->link;
-//		}
-//		tmp = new Movie;
-//
-//		cout << "Название: "; cin >> tmp->name;
-//		cout << "Жанр: "; cin >> tmp->genre;
-//		cout << "Страна: "; cin >> tmp->country;
-//		cout << "Год производства: "; cin >> tmp->productionYear;
-//		cout << "Режиссёр: "; cin >> tmp->producer;
-//		cout << "Качество: "; cin >> tmp->format;
-//		cout << "Звук: "; cin >> tmp->sound;
-//		cout << "Время: "; cin >> tmp->time;
-//		tmp->link = NULL;
-//
-//		current->link = tmp;
-//	}
-//}
-
+// Удаляет указанный фильм
 int MovieLibrary::deleteFilm(int indexToDelete)
 {
 	if (isEmpty)
 	{
-		return 1;
+		return 1; // Возвращаем 1, если список пуст
 	}
-	else if (head->link == NULL && indexToDelete == 1)
-		this->deleteTable();
+	else if (head->link == NULL && indexToDelete == 1) // Если в таблице остался один элемент
+		this->deleteTable(); // Удаляем список целиком
 	else
 	{
-		int index = 1;
-		if (indexToDelete == 1)
+		int index = 1; // Устанавливаем счётчик
+		if (indexToDelete == 1) // Если нужно удалить первый эл-т и он не единственный в списке
 		{
-			Movie* toDelete = head;
-			head = head->link;
-			delete toDelete;
+			Movie* toDelete = head; // Запоминаем адрес начала списка
+			head = head->link; // Перемещаем указатель на начало списка на следующий элемент
+			delete toDelete; // Удаляем прошлый элемент
 			toDelete = NULL;
-			return 0;
+			return 0; // Функция успешно отработала
 		}
-		Movie* current = head;
+		// Если же удалить нужно не первый эл-т
+		Movie* current = head; // Устанавливаем указатель на начало списка
 		Movie* toDelete = NULL;
 		Movie* previous = NULL;
-		while (current->link)
+		while (current->link) // Пока не дойдём до предпоследнего элемента
 		{
-			toDelete = current->link;
-			if (index == indexToDelete)
+			toDelete = current->link; // Сохраняем адрес следующего за текущим эл-та
+			if (index == indexToDelete) // Если найден эл-т, который требуется удалить
 			{
-				current->link = toDelete->link;
-				delete toDelete;
+				current->link = toDelete->link; // Устанавливаем link текущего эл-та на следующий за тем, который хотим удалить
+				delete toDelete; // Удаляем следующий за текущим эл-т
 				toDelete = NULL;
-				return 0;
+				return 0; // Функция успешно отработала
 			}
-			else
+			else // Если эл-т для удаления ещё не найден
 			{
-				index++;
-				previous = current;
-				current = current->link;
+				index++; // Увеличиваем счётчик
+				previous = current; // Сохраняем адрес текущего элемента
+				current = current->link; // Переходи к следующему элементу списка
 			}
 		}
-		if (index == indexToDelete)
+		// Дошли до предпоследнего эл-та
+		if (index == indexToDelete) // нашли элемент для удаления - он последний
 		{
-			previous->link = NULL;
-			delete current;
+			previous->link = NULL; // Устанавливаем link идущего перед текущим узла на NULL
+			delete current; // Удаляем текущий элемент
 			current = NULL;
-			return 0;
+			return 0; // Функция успешно отработала
 		}
 	}
 }
 
+// Удаляет последний фильм
 int MovieLibrary::deleteLastFilm()
 {
-	
 	if (isEmpty)
-		return 1;
-	else if (head->link == NULL)
-		this->deleteTable();
-	else
+		return 1; // Говорим, что список пуст
+	else if (head->link == NULL) // Если последний элемент - единственный в списке
+		this->deleteTable(); // Удаляем весь список
+	else // Если есть ещё элементы помимо него
 	{
+		// Работает аналогично блоку для удаления последнего элемента из функции deleteFilm()
 		Movie* current = head;
 		Movie* toDelete = NULL;
 		Movie* previous = NULL;
@@ -456,27 +378,58 @@ int MovieLibrary::deleteLastFilm()
 	}
 }
 
+// Удаляет список целиком
 void MovieLibrary::deleteTable()
 {
-	if (!isEmpty && head != NULL)
+	if (!isEmpty && head != NULL) // Если список не пуст
 	{
-		Movie* current = head;
-		Movie* toDelete = current;
-		while (current)
+		Movie* current = head; // Устанавливаем указатель на начало списка
+		Movie* toDelete = current; // Запоминаем элемент для удаления как текущий
+		while (current) // Пока не конец списка
 		{
-			current = current->link;
-			delete toDelete;
-			toDelete = current;
+			current = current->link; // Переходим к следующему элементу
+			delete toDelete; // Удаляем предыдущий
+			toDelete = current; // Запоминаем элемент для удаления как текущий
 		}
-		head = NULL;
-		isEmpty = true;
+		head = NULL; // Присваиваем указателю на начало списка значение NULL
+		isEmpty = true; // Устанавливаем флаг в true (список пуст)
 	}
 }
 
+// Отсортировать список в алфавитном порядке по названию фильма
+void MovieLibrary::sort()
+{
+	Movie* current = head;
+	if (head == NULL || isEmpty)
+		return; // Если список пуст - завершаем работу функции
+	else
+	{
+		bool isSorted = false; // Флаг (отсортировано) = false
+		while (!isSorted) // Пока не отсортировано
+		{
+			isSorted = true; // Считаем, что список отсортирован
+			current = head; // Устанавливаем указатель на начало списка
+			while (current->link) // Пока не конец списка
+			{
+				if (current->name > current->link->name) // Если элементы нужно поменять местами
+				{
+					// Меняем их местами
+					swap(current, current->link);
+					isSorted = false; // Устанавливаем флаг (отсортировано) в false
+				}
+				current = current->link; // Переходим к следующему элементу
+			}
+		}
+	}
+}
+
+// Поменять два элемента местами (служебная, для сортировки)
 void MovieLibrary::swap(Movie *m1, Movie *m2)
 {
+	// Если ни один из переданных указателей не хранит NULL
 	if (m1 != NULL && m2 != NULL)
 	{
+		// Меняем поля этих элементов местави (все, кроме link)
 		Movie *t = new Movie;
 		t->name = m1->name;
 		t->genre = m1->genre;
@@ -505,33 +458,6 @@ void MovieLibrary::swap(Movie *m1, Movie *m2)
 		m2->sound = t->sound;
 		m2->time = t->time;
 	}
-	else
-		cout << "Check your privelege!" << endl;
-}
-
-void MovieLibrary::sort()
-{
-	Movie* current = head;
-	if (head == NULL || isEmpty)
-	{
-		cout << "Список пуст!" << endl;
-	}
-	else
-	{
-		bool isSorted = false;
-		while (!isSorted)
-		{
-			isSorted = true;
-			current = head;
-			while (current->link)
-			{
-				if (current->name > current->link->name)
-				{
-					swap(current, current->link);
-					isSorted = false;
-				}
-				current = current->link;
-			}
-		}
-	}
+	else // Если передан хоть один пустой указатель
+		return; // Выходим
 }
