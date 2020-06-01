@@ -126,9 +126,9 @@ namespace CourseWork {
 		// Эта часть программы заполняется автоматически средой разработки Visual Studio
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::DataVisualization::Charting::ChartArea^  chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
-			System::Windows::Forms::DataVisualization::Charting::Legend^  legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
-			System::Windows::Forms::DataVisualization::Charting::Series^  series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^  chartArea2 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::Legend^  legend2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
+			System::Windows::Forms::DataVisualization::Charting::Series^  series2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->fName = (gcnew System::Windows::Forms::TextBox());
 			this->fGenre = (gcnew System::Windows::Forms::TextBox());
 			this->fCountry = (gcnew System::Windows::Forms::TextBox());
@@ -285,8 +285,13 @@ namespace CourseWork {
 			// 
 			// dataGridViewForList
 			// 
+			this->dataGridViewForList->AllowUserToAddRows = false;
+			this->dataGridViewForList->AllowUserToDeleteRows = false;
+			this->dataGridViewForList->AllowUserToResizeColumns = false;
+			this->dataGridViewForList->AllowUserToResizeRows = false;
 			this->dataGridViewForList->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::Fill;
 			this->dataGridViewForList->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			this->dataGridViewForList->Enabled = false;
 			this->dataGridViewForList->Location = System::Drawing::Point(254, 13);
 			this->dataGridViewForList->Name = L"dataGridViewForList";
 			this->dataGridViewForList->Size = System::Drawing::Size(1036, 625);
@@ -439,7 +444,7 @@ namespace CourseWork {
 			this->stopInputList->Name = L"stopInputList";
 			this->stopInputList->Size = System::Drawing::Size(164, 23);
 			this->stopInputList->TabIndex = 9;
-			this->stopInputList->Text = L"Стоп";
+			this->stopInputList->Text = L"Назад";
 			this->stopInputList->UseVisualStyleBackColor = true;
 			this->stopInputList->Click += gcnew System::EventHandler(this, &MyForm::stopInputList_Click);
 			// 
@@ -469,7 +474,7 @@ namespace CourseWork {
 			this->deleteElement->Name = L"deleteElement";
 			this->deleteElement->Size = System::Drawing::Size(177, 23);
 			this->deleteElement->TabIndex = 17;
-			this->deleteElement->Text = L"Удалить элемент";
+			this->deleteElement->Text = L"Удаление элементов";
 			this->deleteElement->UseVisualStyleBackColor = true;
 			this->deleteElement->Click += gcnew System::EventHandler(this, &MyForm::deleteElement_Click);
 			// 
@@ -479,7 +484,7 @@ namespace CourseWork {
 			this->editElement->Name = L"editElement";
 			this->editElement->Size = System::Drawing::Size(176, 23);
 			this->editElement->TabIndex = 18;
-			this->editElement->Text = L"Редактировать элемент";
+			this->editElement->Text = L"Редактирование элемент";
 			this->editElement->UseVisualStyleBackColor = true;
 			this->editElement->Click += gcnew System::EventHandler(this, &MyForm::editElement_Click);
 			// 
@@ -532,7 +537,7 @@ namespace CourseWork {
 			this->specialRequestsPanel->Controls->Add(this->cancelButton);
 			this->specialRequestsPanel->Controls->Add(this->confirmButton);
 			this->specialRequestsPanel->Enabled = false;
-			this->specialRequestsPanel->Location = System::Drawing::Point(270, 449);
+			this->specialRequestsPanel->Location = System::Drawing::Point(281, 143);
 			this->specialRequestsPanel->Name = L"specialRequestsPanel";
 			this->specialRequestsPanel->Size = System::Drawing::Size(643, 137);
 			this->specialRequestsPanel->TabIndex = 23;
@@ -604,18 +609,18 @@ namespace CourseWork {
 			// 
 			// chartFor4Request
 			// 
-			chartArea1->Name = L"ChartArea1";
-			this->chartFor4Request->ChartAreas->Add(chartArea1);
+			chartArea2->Name = L"ChartArea1";
+			this->chartFor4Request->ChartAreas->Add(chartArea2);
 			this->chartFor4Request->Enabled = false;
-			legend1->Name = L"Legend1";
-			this->chartFor4Request->Legends->Add(legend1);
-			this->chartFor4Request->Location = System::Drawing::Point(942, 255);
+			legend2->Name = L"Legend1";
+			this->chartFor4Request->Legends->Add(legend2);
+			this->chartFor4Request->Location = System::Drawing::Point(928, 200);
 			this->chartFor4Request->Name = L"chartFor4Request";
-			series1->ChartArea = L"ChartArea1";
-			series1->Legend = L"Legend1";
-			series1->Name = L"Series1";
-			this->chartFor4Request->Series->Add(series1);
-			this->chartFor4Request->Size = System::Drawing::Size(300, 300);
+			series2->ChartArea = L"ChartArea1";
+			series2->Legend = L"Legend1";
+			series2->Name = L"Series1";
+			this->chartFor4Request->Series->Add(series2);
+			this->chartFor4Request->Size = System::Drawing::Size(350, 375);
 			this->chartFor4Request->TabIndex = 25;
 			this->chartFor4Request->Text = L"Диаграмма";
 			this->chartFor4Request->Visible = false;
@@ -663,7 +668,8 @@ namespace CourseWork {
 			this->Controls->Add(this->rewriteFile);
 			this->Location = System::Drawing::Point(13, 309);
 			this->Name = L"MyForm";
-			this->Text = L"MyForm";
+			this->Text = L"Курсовая работа по ОАиООП \"Разработка приложения с использованием динамических ст"
+				L"руктур данных\" вариант 4 \"Домашняя кинотека\" гр. 940 Башев Константин";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridViewForList))->EndInit();
 			this->inputListPanel->ResumeLayout(false);
 			this->inputListPanel->PerformLayout();

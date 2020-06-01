@@ -139,10 +139,6 @@ CourseWork::MyForm::MyForm(MovieLibrary * list)
 	ML = list;
 	head = ML->getList();
 	current = head;
-
-	// Вывод на экран подсказки
-	MessageBox::Show("Эта программа разработана для курсовой работы на тему ""Разработка приложения с использованием динамических структур данных"" \nпо курсу Основы Алгоритмизации и ООП \nВыполнил - студент группы 940, Башев К.С.");
-	MessageBox::Show("Для начала работы с программой требуется ввести данные с клавиатуры или загрузить из файла - иначе функционал будет недоступен.");
 }
 
 // Деструктор формы
@@ -678,7 +674,7 @@ System::Void CourseWork::MyForm::inputList_Click(System::Object ^ sender, System
 	inputListPanel->Enabled = true;
 	inputListPanel->Visible = true;
 
-	inputEl->Text = "Ввести элемент";
+	inputEl->Text = "Добавить элемент";
 
 	// Скрываем другие графические элементы
 	dataGridViewForList->Visible = false;
@@ -700,7 +696,7 @@ System::Void CourseWork::MyForm::inputList_Click(System::Object ^ sender, System
 	return System::Void();
 }
 
-// Нажата кнопка "стоп" на специальной панели
+// Нажата кнопка "назад" на специальной панели
 System::Void CourseWork::MyForm::stopInputList_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	// Прячем элементы формы
@@ -923,7 +919,7 @@ System::Void CourseWork::MyForm::editElement_Click(System::Object ^ sender, Syst
 		inputListPanel->Visible = true;
 
 		inputEl->Text = "Редактировать элемент";
-		labelToPurpose->Text = "для изменения";
+		labelToPurpose->Text = "Выберите элемент \nдля изменения";
 
 		dataGridViewForList->Visible = false;
 
@@ -1096,13 +1092,24 @@ System::Void CourseWork::MyForm::specialRequest4_Click(System::Object ^ sender, 
 	}
 
 	// Выводим на форму диаграммы
-	chartFor4Request->Enabled = true;
-	chartFor4Request->Visible = true;
+	if (specialRequest4->Text == "Диаграмма процентного соотношения стран - производителей фильмов")
+	{
+		chartFor4Request->Enabled = true;
+		chartFor4Request->Visible = true;
+
+		specialRequest4->Text = "Скрыть диаграмму";
+	}
+	else
+	{
+		chartFor4Request->Enabled = false;
+		chartFor4Request->Visible = false;
+
+		specialRequest4->Text = "Диаграмма процентного соотношения стран - производителей фильмов";
+	}
+	
 
 	// Обновляем диаграмму
 	this->updateDiag();
-
-	specialRequest4->Text = "Обновить диаграмму";
 	
 	return System::Void();
 }
@@ -1422,7 +1429,7 @@ System::Void CourseWork::MyForm::confirmButton_Click(System::Object ^ sender, Sy
 
 	// Очищаем текстовые поля
 	textBox1->Clear();
-	textBox1->Clear();
+	textBox2->Clear();
 
 	return System::Void();
 }
@@ -1462,7 +1469,7 @@ System::Void CourseWork::MyForm::cancelButton_Click(System::Object ^ sender, Sys
 
 	// Очищаем текстовые поля
 	textBox1->Clear();
-	textBox1->Clear();
+	textBox2->Clear();
 
 	// Переходим в режим ожидания команд
 	act = Action::nul;
@@ -1488,8 +1495,7 @@ System::Void CourseWork::MyForm::exitButton_Click(System::Object ^ sender, Syste
 System::Void CourseWork::MyForm::helpButton_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	// Выводим подсказки на экран
-	MessageBox::Show("Эта программа разработана для курсовой работы на тему ""Разработка приложения с использованием динамических структур данных"" \nпо курсу Основы Алгоритмизации и ООП \nВыполнил - студент группы 940, Башев К.С.");
-	MessageBox::Show("Для начала работы с программой требуется ввести данные с клавиатуры или загрузить из файла - иначе функционал будет недоступен.");
+	MessageBox::Show("Эта программа разработана для курсовой работы на тему Разработка приложения с использованием динамических структур данных \nпо курсу Основы Алгоритмизации и ООП \nВариант №4 - домашняя кинотека\nВыполнил - студент группы 940, Башев К.С.");
 	return System::Void();
 }
 
