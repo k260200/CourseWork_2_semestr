@@ -9,6 +9,7 @@
 #include <msclr\marshal_cppstd.h>
 
 #include "MovieLibrary.h"
+#include "dataCounter.h"
 
 namespace CourseWork {
 

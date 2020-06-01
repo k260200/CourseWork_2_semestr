@@ -246,6 +246,11 @@ int MovieLibrary::loadList()
 	return 0;
 }
 
+void MovieLibrary::setFileName(string newFileName)
+{
+	fileName = newFileName;
+}
+
 void MovieLibrary::createFirstFilm(Movie m)
 {
 	head = new Movie;

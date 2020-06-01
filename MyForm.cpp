@@ -967,19 +967,20 @@ System::Void CourseWork::MyForm::specialRequest4_Click(System::Object ^ sender, 
 
 	chartFor4Request->Series[0]->Points->Clear();
 
-	chartFor4Request->Series[0]->Points->AddY(a1);
-	chartFor4Request->Series[0]->Points->AddY(a2);
-	chartFor4Request->Series[0]->Points->AddY(a3);
-	chartFor4Request->Series[0]->Points->AddY(a4);
+	dataCounter dc(ML->getList());
+	dc.analyse();
 
-	chartFor4Request->Series[0]->Points[0]->LegendText = "один";
-	chartFor4Request->Series[0]->Points[1]->LegendText = "два";
-	chartFor4Request->Series[0]->Points[2]->LegendText = "три";
-	chartFor4Request->Series[0]->Points[3]->LegendText = "четыре";
+	for (int i = 0; i < dc.getAmountOfStats(); ++i)
+	{
+		chartFor4Request->Series[0]->Points->AddY(dc.getPointAt(i));
+		chartFor4Request->Series[0]->Points[i]->LegendText = context.marshal_as<String^>(dc.getStatAt(i));
+	}
 
 	chartFor4Request->Enabled = true;
 	chartFor4Request->Visible = true;
 
+	specialRequest4->Text = "Обновить диаграмму";
+	dc.clear();
 	return System::Void();
 }
 
@@ -1250,6 +1251,7 @@ System::Void CourseWork::MyForm::confirmButton_Click(System::Object ^ sender, Sy
 			dataGridViewForList->DataSource = table;
 
 			tmp->deleteTable();
+			delete tmp;
 			head = ML->getList();
 			current = head;
 		}
