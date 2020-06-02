@@ -518,8 +518,7 @@ System::Void CourseWork::MyForm::inputEl_Click(System::Object ^ sender, System::
 	// Обновляем данные ещё раз
 	head = ML->getList();
 	current = head;
-
-	return System::Void();
+	chooseElNumber->Checked = false;
 }
 
 // Нажата кнопка "Вывести таблицу на экран"

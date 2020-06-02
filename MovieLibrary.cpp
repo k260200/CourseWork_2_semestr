@@ -321,6 +321,7 @@ int MovieLibrary::deleteFilm(int indexToDelete)
 			return 0; // Функция успешно отработала
 		}
 		// Если же удалить нужно не первый эл-т
+		index++;
 		Movie* current = head; // Устанавливаем указатель на начало списка
 		Movie* toDelete = NULL;
 		Movie* previous = NULL;

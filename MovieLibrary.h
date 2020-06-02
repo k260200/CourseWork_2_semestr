@@ -6,7 +6,8 @@
 using namespace std;
 
  // Структура для описания одного фильма из кинотеки
-struct Movie {
+struct Movie 
+{
 	string name; // Название
 	string genre; // Жанр
 	string country; // Страна

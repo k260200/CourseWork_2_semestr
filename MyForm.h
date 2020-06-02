@@ -126,9 +126,9 @@ namespace CourseWork {
 		// Эта часть программы заполняется автоматически средой разработки Visual Studio
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::DataVisualization::Charting::ChartArea^  chartArea2 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
-			System::Windows::Forms::DataVisualization::Charting::Legend^  legend2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
-			System::Windows::Forms::DataVisualization::Charting::Series^  series2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^  chartArea5 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::Legend^  legend5 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
+			System::Windows::Forms::DataVisualization::Charting::Series^  series5 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->fName = (gcnew System::Windows::Forms::TextBox());
 			this->fGenre = (gcnew System::Windows::Forms::TextBox());
 			this->fCountry = (gcnew System::Windows::Forms::TextBox());
@@ -294,7 +294,7 @@ namespace CourseWork {
 			this->dataGridViewForList->Enabled = false;
 			this->dataGridViewForList->Location = System::Drawing::Point(254, 13);
 			this->dataGridViewForList->Name = L"dataGridViewForList";
-			this->dataGridViewForList->Size = System::Drawing::Size(1036, 625);
+			this->dataGridViewForList->Size = System::Drawing::Size(1036, 612);
 			this->dataGridViewForList->TabIndex = 12;
 			// 
 			// outputList
@@ -484,7 +484,7 @@ namespace CourseWork {
 			this->editElement->Name = L"editElement";
 			this->editElement->Size = System::Drawing::Size(176, 23);
 			this->editElement->TabIndex = 18;
-			this->editElement->Text = L"Редактирование элемент";
+			this->editElement->Text = L"Редактирование элементов";
 			this->editElement->UseVisualStyleBackColor = true;
 			this->editElement->Click += gcnew System::EventHandler(this, &MyForm::editElement_Click);
 			// 
@@ -537,7 +537,7 @@ namespace CourseWork {
 			this->specialRequestsPanel->Controls->Add(this->cancelButton);
 			this->specialRequestsPanel->Controls->Add(this->confirmButton);
 			this->specialRequestsPanel->Enabled = false;
-			this->specialRequestsPanel->Location = System::Drawing::Point(281, 143);
+			this->specialRequestsPanel->Location = System::Drawing::Point(279, 261);
 			this->specialRequestsPanel->Name = L"specialRequestsPanel";
 			this->specialRequestsPanel->Size = System::Drawing::Size(643, 137);
 			this->specialRequestsPanel->TabIndex = 23;
@@ -599,7 +599,7 @@ namespace CourseWork {
 			// 
 			// exitButton
 			// 
-			this->exitButton->Location = System::Drawing::Point(13, 614);
+			this->exitButton->Location = System::Drawing::Point(13, 592);
 			this->exitButton->Name = L"exitButton";
 			this->exitButton->Size = System::Drawing::Size(176, 23);
 			this->exitButton->TabIndex = 24;
@@ -609,17 +609,17 @@ namespace CourseWork {
 			// 
 			// chartFor4Request
 			// 
-			chartArea2->Name = L"ChartArea1";
-			this->chartFor4Request->ChartAreas->Add(chartArea2);
+			chartArea5->Name = L"ChartArea1";
+			this->chartFor4Request->ChartAreas->Add(chartArea5);
 			this->chartFor4Request->Enabled = false;
-			legend2->Name = L"Legend1";
-			this->chartFor4Request->Legends->Add(legend2);
+			legend5->Name = L"Legend1";
+			this->chartFor4Request->Legends->Add(legend5);
 			this->chartFor4Request->Location = System::Drawing::Point(928, 200);
 			this->chartFor4Request->Name = L"chartFor4Request";
-			series2->ChartArea = L"ChartArea1";
-			series2->Legend = L"Legend1";
-			series2->Name = L"Series1";
-			this->chartFor4Request->Series->Add(series2);
+			series5->ChartArea = L"ChartArea1";
+			series5->Legend = L"Legend1";
+			series5->Name = L"Series1";
+			this->chartFor4Request->Series->Add(series5);
 			this->chartFor4Request->Size = System::Drawing::Size(350, 375);
 			this->chartFor4Request->TabIndex = 25;
 			this->chartFor4Request->Text = L"Диаграмма";
@@ -627,11 +627,12 @@ namespace CourseWork {
 			// 
 			// saveFileDialog1
 			// 
+			this->saveFileDialog1->FileName = L"database.txt";
 			this->saveFileDialog1->Filter = L"Текстовые файлы |*.txt";
 			// 
 			// openFileDialog1
 			// 
-			this->openFileDialog1->FileName = L"openFileDialog1";
+			this->openFileDialog1->FileName = L"database.tct";
 			this->openFileDialog1->Filter = L"Текстовые файлы |*.txt";
 			// 
 			// helpButton
@@ -648,7 +649,7 @@ namespace CourseWork {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1330, 650);
+			this->ClientSize = System::Drawing::Size(1330, 637);
 			this->Controls->Add(this->helpButton);
 			this->Controls->Add(this->chartFor4Request);
 			this->Controls->Add(this->exitButton);
@@ -711,7 +712,7 @@ private: System::Void rewriteFile_Click(System::Object^  sender, System::EventAr
 private: System::Void readFile_Click(System::Object^  sender, System::EventArgs^  e);
 private: System::Void inputList_Click(System::Object^  sender, System::EventArgs^  e);
 
-			// Кнопка рекратить действие на специальной панели (для добавления, удаления, ввода с клавиатуры и редактирования)
+			// Кнопка прекратить действие на специальной панели (для добавления, удаления, ввода с клавиатуры и редактирования)
 private: System::Void stopInputList_Click(System::Object^  sender, System::EventArgs^  e);
 
 			// Нажатие кнопок дополнить, удалить и редактировать элемент таблицы соответственно
