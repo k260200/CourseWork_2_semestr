@@ -126,9 +126,9 @@ namespace CourseWork {
 		// Эта часть программы заполняется автоматически средой разработки Visual Studio
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::DataVisualization::Charting::ChartArea^  chartArea5 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
-			System::Windows::Forms::DataVisualization::Charting::Legend^  legend5 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
-			System::Windows::Forms::DataVisualization::Charting::Series^  series5 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^  chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::Legend^  legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
+			System::Windows::Forms::DataVisualization::Charting::Series^  series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->fName = (gcnew System::Windows::Forms::TextBox());
 			this->fGenre = (gcnew System::Windows::Forms::TextBox());
 			this->fCountry = (gcnew System::Windows::Forms::TextBox());
@@ -255,32 +255,35 @@ namespace CourseWork {
 			// 
 			// inputEl
 			// 
+			this->inputEl->BackColor = System::Drawing::SystemColors::AppWorkspace;
 			this->inputEl->Location = System::Drawing::Point(172, 323);
 			this->inputEl->Name = L"inputEl";
 			this->inputEl->Size = System::Drawing::Size(168, 23);
 			this->inputEl->TabIndex = 8;
 			this->inputEl->Text = L"Ввести элемент";
-			this->inputEl->UseVisualStyleBackColor = true;
+			this->inputEl->UseVisualStyleBackColor = false;
 			this->inputEl->Click += gcnew System::EventHandler(this, &MyForm::inputEl_Click);
 			// 
 			// rewriteFile
 			// 
+			this->rewriteFile->BackColor = System::Drawing::SystemColors::AppWorkspace;
 			this->rewriteFile->Location = System::Drawing::Point(12, 89);
 			this->rewriteFile->Name = L"rewriteFile";
 			this->rewriteFile->Size = System::Drawing::Size(177, 23);
 			this->rewriteFile->TabIndex = 10;
 			this->rewriteFile->Text = L"Сохранить таблицу в файл";
-			this->rewriteFile->UseVisualStyleBackColor = true;
+			this->rewriteFile->UseVisualStyleBackColor = false;
 			this->rewriteFile->Click += gcnew System::EventHandler(this, &MyForm::rewriteFile_Click);
 			// 
 			// readFile
 			// 
+			this->readFile->BackColor = System::Drawing::SystemColors::AppWorkspace;
 			this->readFile->Location = System::Drawing::Point(12, 37);
 			this->readFile->Name = L"readFile";
 			this->readFile->Size = System::Drawing::Size(177, 23);
 			this->readFile->TabIndex = 11;
 			this->readFile->Text = L"Загрузить таблицу из файла";
-			this->readFile->UseVisualStyleBackColor = true;
+			this->readFile->UseVisualStyleBackColor = false;
 			this->readFile->Click += gcnew System::EventHandler(this, &MyForm::readFile_Click);
 			// 
 			// dataGridViewForList
@@ -290,6 +293,7 @@ namespace CourseWork {
 			this->dataGridViewForList->AllowUserToResizeColumns = false;
 			this->dataGridViewForList->AllowUserToResizeRows = false;
 			this->dataGridViewForList->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::Fill;
+			this->dataGridViewForList->BackgroundColor = System::Drawing::SystemColors::ControlDarkDark;
 			this->dataGridViewForList->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			this->dataGridViewForList->Enabled = false;
 			this->dataGridViewForList->Location = System::Drawing::Point(254, 13);
@@ -299,12 +303,13 @@ namespace CourseWork {
 			// 
 			// outputList
 			// 
+			this->outputList->BackColor = System::Drawing::SystemColors::AppWorkspace;
 			this->outputList->Location = System::Drawing::Point(12, 63);
 			this->outputList->Name = L"outputList";
 			this->outputList->Size = System::Drawing::Size(177, 23);
 			this->outputList->TabIndex = 13;
 			this->outputList->Text = L"Вывести таблицу на экран";
-			this->outputList->UseVisualStyleBackColor = true;
+			this->outputList->UseVisualStyleBackColor = false;
 			this->outputList->Click += gcnew System::EventHandler(this, &MyForm::outputList_Click);
 			// 
 			// inputListPanel
@@ -440,92 +445,101 @@ namespace CourseWork {
 			// 
 			// stopInputList
 			// 
+			this->stopInputList->BackColor = System::Drawing::SystemColors::AppWorkspace;
 			this->stopInputList->Location = System::Drawing::Point(369, 323);
 			this->stopInputList->Name = L"stopInputList";
 			this->stopInputList->Size = System::Drawing::Size(164, 23);
 			this->stopInputList->TabIndex = 9;
 			this->stopInputList->Text = L"Назад";
-			this->stopInputList->UseVisualStyleBackColor = true;
+			this->stopInputList->UseVisualStyleBackColor = false;
 			this->stopInputList->Click += gcnew System::EventHandler(this, &MyForm::stopInputList_Click);
 			// 
 			// inputList
 			// 
+			this->inputList->BackColor = System::Drawing::SystemColors::AppWorkspace;
 			this->inputList->Location = System::Drawing::Point(12, 13);
 			this->inputList->Name = L"inputList";
 			this->inputList->Size = System::Drawing::Size(177, 23);
 			this->inputList->TabIndex = 15;
 			this->inputList->Text = L"Ввести список с клавиатуры";
-			this->inputList->UseVisualStyleBackColor = true;
+			this->inputList->UseVisualStyleBackColor = false;
 			this->inputList->Click += gcnew System::EventHandler(this, &MyForm::inputList_Click);
 			// 
 			// addToList
 			// 
+			this->addToList->BackColor = System::Drawing::SystemColors::AppWorkspace;
 			this->addToList->Location = System::Drawing::Point(12, 140);
 			this->addToList->Name = L"addToList";
 			this->addToList->Size = System::Drawing::Size(177, 23);
 			this->addToList->TabIndex = 16;
 			this->addToList->Text = L"Дополнить таблицу";
-			this->addToList->UseVisualStyleBackColor = true;
+			this->addToList->UseVisualStyleBackColor = false;
 			this->addToList->Click += gcnew System::EventHandler(this, &MyForm::addToList_Click);
 			// 
 			// deleteElement
 			// 
+			this->deleteElement->BackColor = System::Drawing::SystemColors::AppWorkspace;
 			this->deleteElement->Location = System::Drawing::Point(12, 170);
 			this->deleteElement->Name = L"deleteElement";
 			this->deleteElement->Size = System::Drawing::Size(177, 23);
 			this->deleteElement->TabIndex = 17;
 			this->deleteElement->Text = L"Удаление элементов";
-			this->deleteElement->UseVisualStyleBackColor = true;
+			this->deleteElement->UseVisualStyleBackColor = false;
 			this->deleteElement->Click += gcnew System::EventHandler(this, &MyForm::deleteElement_Click);
 			// 
 			// editElement
 			// 
+			this->editElement->BackColor = System::Drawing::SystemColors::AppWorkspace;
 			this->editElement->Location = System::Drawing::Point(13, 200);
 			this->editElement->Name = L"editElement";
 			this->editElement->Size = System::Drawing::Size(176, 23);
 			this->editElement->TabIndex = 18;
 			this->editElement->Text = L"Редактирование элементов";
-			this->editElement->UseVisualStyleBackColor = true;
+			this->editElement->UseVisualStyleBackColor = false;
 			this->editElement->Click += gcnew System::EventHandler(this, &MyForm::editElement_Click);
 			// 
 			// specialRequest1
 			// 
+			this->specialRequest1->BackColor = System::Drawing::SystemColors::AppWorkspace;
 			this->specialRequest1->Location = System::Drawing::Point(12, 255);
 			this->specialRequest1->Name = L"specialRequest1";
 			this->specialRequest1->Size = System::Drawing::Size(177, 40);
 			this->specialRequest1->TabIndex = 19;
 			this->specialRequest1->Text = L"Информация о фильме по названию";
-			this->specialRequest1->UseVisualStyleBackColor = true;
+			this->specialRequest1->UseVisualStyleBackColor = false;
 			this->specialRequest1->Click += gcnew System::EventHandler(this, &MyForm::specialRequest1_Click);
 			// 
 			// specialRequest2
 			// 
+			this->specialRequest2->BackColor = System::Drawing::SystemColors::AppWorkspace;
 			this->specialRequest2->Location = System::Drawing::Point(13, 301);
 			this->specialRequest2->Name = L"specialRequest2";
 			this->specialRequest2->Size = System::Drawing::Size(176, 34);
 			this->specialRequest2->TabIndex = 20;
 			this->specialRequest2->Text = L"Вывод фильмов определённого жанра и страны";
-			this->specialRequest2->UseVisualStyleBackColor = true;
+			this->specialRequest2->UseVisualStyleBackColor = false;
 			this->specialRequest2->Click += gcnew System::EventHandler(this, &MyForm::specialRequest2_Click);
 			// 
 			// specialRequest3
 			// 
+			this->specialRequest3->BackColor = System::Drawing::SystemColors::AppWorkspace;
 			this->specialRequest3->Location = System::Drawing::Point(12, 341);
 			this->specialRequest3->Name = L"specialRequest3";
 			this->specialRequest3->Size = System::Drawing::Size(177, 57);
 			this->specialRequest3->TabIndex = 21;
 			this->specialRequest3->Text = L"Вывод фильмов определённого режиссёра в алфавитном порядке";
-			this->specialRequest3->UseVisualStyleBackColor = true;
+			this->specialRequest3->UseVisualStyleBackColor = false;
 			this->specialRequest3->Click += gcnew System::EventHandler(this, &MyForm::specialRequest3_Click);
 			// 
 			// specialRequest4
 			// 
+			this->specialRequest4->BackColor = System::Drawing::SystemColors::AppWorkspace;
 			this->specialRequest4->Location = System::Drawing::Point(12, 404);
 			this->specialRequest4->Name = L"specialRequest4";
 			this->specialRequest4->Size = System::Drawing::Size(177, 68);
 			this->specialRequest4->TabIndex = 22;
-			this->specialRequest4->Text = L"Диаграмма процентного соотношения стран-производителей фильмов";
-			this->specialRequest4->UseVisualStyleBackColor = true;
+			this->specialRequest4->Text = L"Диаграмма процентного соотношения стран - производителей фильмов";
+			this->specialRequest4->UseVisualStyleBackColor = false;
 			this->specialRequest4->Click += gcnew System::EventHandler(this, &MyForm::specialRequest4_Click);
 			// 
 			// specialRequestsPanel
@@ -537,7 +551,7 @@ namespace CourseWork {
 			this->specialRequestsPanel->Controls->Add(this->cancelButton);
 			this->specialRequestsPanel->Controls->Add(this->confirmButton);
 			this->specialRequestsPanel->Enabled = false;
-			this->specialRequestsPanel->Location = System::Drawing::Point(279, 261);
+			this->specialRequestsPanel->Location = System::Drawing::Point(267, 261);
 			this->specialRequestsPanel->Name = L"specialRequestsPanel";
 			this->specialRequestsPanel->Size = System::Drawing::Size(643, 137);
 			this->specialRequestsPanel->TabIndex = 23;
@@ -579,48 +593,52 @@ namespace CourseWork {
 			// 
 			// cancelButton
 			// 
+			this->cancelButton->BackColor = System::Drawing::SystemColors::AppWorkspace;
 			this->cancelButton->Location = System::Drawing::Point(453, 103);
 			this->cancelButton->Name = L"cancelButton";
 			this->cancelButton->Size = System::Drawing::Size(164, 23);
 			this->cancelButton->TabIndex = 1;
 			this->cancelButton->Text = L"Назад";
-			this->cancelButton->UseVisualStyleBackColor = true;
+			this->cancelButton->UseVisualStyleBackColor = false;
 			this->cancelButton->Click += gcnew System::EventHandler(this, &MyForm::cancelButton_Click);
 			// 
 			// confirmButton
 			// 
+			this->confirmButton->BackColor = System::Drawing::SystemColors::AppWorkspace;
 			this->confirmButton->Location = System::Drawing::Point(256, 103);
 			this->confirmButton->Name = L"confirmButton";
 			this->confirmButton->Size = System::Drawing::Size(168, 23);
 			this->confirmButton->TabIndex = 0;
 			this->confirmButton->Text = L"Вывод";
-			this->confirmButton->UseVisualStyleBackColor = true;
+			this->confirmButton->UseVisualStyleBackColor = false;
 			this->confirmButton->Click += gcnew System::EventHandler(this, &MyForm::confirmButton_Click);
 			// 
 			// exitButton
 			// 
+			this->exitButton->BackColor = System::Drawing::SystemColors::AppWorkspace;
 			this->exitButton->Location = System::Drawing::Point(13, 592);
 			this->exitButton->Name = L"exitButton";
 			this->exitButton->Size = System::Drawing::Size(176, 23);
 			this->exitButton->TabIndex = 24;
 			this->exitButton->Text = L"Выход";
-			this->exitButton->UseVisualStyleBackColor = true;
+			this->exitButton->UseVisualStyleBackColor = false;
 			this->exitButton->Click += gcnew System::EventHandler(this, &MyForm::exitButton_Click);
 			// 
 			// chartFor4Request
 			// 
-			chartArea5->Name = L"ChartArea1";
-			this->chartFor4Request->ChartAreas->Add(chartArea5);
+			this->chartFor4Request->BackColor = System::Drawing::Color::DimGray;
+			chartArea1->Name = L"ChartArea1";
+			this->chartFor4Request->ChartAreas->Add(chartArea1);
 			this->chartFor4Request->Enabled = false;
-			legend5->Name = L"Legend1";
-			this->chartFor4Request->Legends->Add(legend5);
-			this->chartFor4Request->Location = System::Drawing::Point(928, 200);
+			legend1->Name = L"Legend1";
+			this->chartFor4Request->Legends->Add(legend1);
+			this->chartFor4Request->Location = System::Drawing::Point(757, 200);
 			this->chartFor4Request->Name = L"chartFor4Request";
-			series5->ChartArea = L"ChartArea1";
-			series5->Legend = L"Legend1";
-			series5->Name = L"Series1";
-			this->chartFor4Request->Series->Add(series5);
-			this->chartFor4Request->Size = System::Drawing::Size(350, 375);
+			series1->ChartArea = L"ChartArea1";
+			series1->Legend = L"Legend1";
+			series1->Name = L"Series1";
+			this->chartFor4Request->Series->Add(series1);
+			this->chartFor4Request->Size = System::Drawing::Size(521, 415);
 			this->chartFor4Request->TabIndex = 25;
 			this->chartFor4Request->Text = L"Диаграмма";
 			this->chartFor4Request->Visible = false;
@@ -637,18 +655,20 @@ namespace CourseWork {
 			// 
 			// helpButton
 			// 
+			this->helpButton->BackColor = System::Drawing::SystemColors::AppWorkspace;
 			this->helpButton->Location = System::Drawing::Point(12, 563);
 			this->helpButton->Name = L"helpButton";
 			this->helpButton->Size = System::Drawing::Size(177, 23);
 			this->helpButton->TabIndex = 26;
 			this->helpButton->Text = L"Справка";
-			this->helpButton->UseVisualStyleBackColor = true;
+			this->helpButton->UseVisualStyleBackColor = false;
 			this->helpButton->Click += gcnew System::EventHandler(this, &MyForm::helpButton_Click);
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->BackColor = System::Drawing::SystemColors::ControlDarkDark;
 			this->ClientSize = System::Drawing::Size(1330, 637);
 			this->Controls->Add(this->helpButton);
 			this->Controls->Add(this->chartFor4Request);

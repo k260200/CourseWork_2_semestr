@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MyForm.h"
+#include "LoadScreen.h"
 
 // Вывод таблицы на экран (метод)
 void CourseWork::MyForm::showList()
@@ -108,6 +109,9 @@ CourseWork::MyForm::MyForm(MovieLibrary * list)
 {
 	// Инициализируем переменные и прячем графические элементы, которые не должны быть доступны пользователю, пока не введена таблица
 	InitializeComponent();
+
+	LoadScreen^ ls = gcnew LoadScreen();
+	ls->ShowDialog();
 
 	act = Action::nul;
 
