@@ -6,6 +6,7 @@ dataCounter::dataCounter(Movie* hd)
 {
 	head = hd;
 	amountOfStats = 0;
+	all = 0;
 }
 
 dataCounter::~dataCounter()
@@ -16,6 +17,7 @@ dataCounter::~dataCounter()
 // Обработка данных, составление выборки
 int dataCounter::analyse()
 {
+	all = 0;
 	if(head == NULL)
 		return 1; // Выходим, если кинотека пуста
 	else
@@ -29,6 +31,7 @@ int dataCounter::analyse()
 				stats.push_back(current->country);
 				points.push_back(1);
 				amountOfStats++;
+				all++;
 			}
 			else // Выполняем проверку для последующих эл-тов
 			{
@@ -40,6 +43,7 @@ int dataCounter::analyse()
 					stats.push_back(current->country); // Добавляем страну в выборку
 					points.push_back(1);
 					amountOfStats++;
+					all++;
 				}
 			}
 

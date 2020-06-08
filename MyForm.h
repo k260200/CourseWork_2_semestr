@@ -626,7 +626,7 @@ namespace CourseWork {
 			// 
 			// chartFor4Request
 			// 
-			this->chartFor4Request->BackColor = System::Drawing::Color::DimGray;
+			this->chartFor4Request->BackColor = System::Drawing::Color::Silver;
 			chartArea1->Name = L"ChartArea1";
 			this->chartFor4Request->ChartAreas->Add(chartArea1);
 			this->chartFor4Request->Enabled = false;
@@ -668,7 +668,7 @@ namespace CourseWork {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->BackColor = System::Drawing::SystemColors::ControlDarkDark;
+			this->BackColor = System::Drawing::SystemColors::ScrollBar;
 			this->ClientSize = System::Drawing::Size(1330, 637);
 			this->Controls->Add(this->helpButton);
 			this->Controls->Add(this->chartFor4Request);

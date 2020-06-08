@@ -97,6 +97,8 @@ void CourseWork::MyForm::updateDiag()
 		{
 			chartFor4Request->Series[0]->Points->AddY(dc.getPointAt(i));
 			chartFor4Request->Series[0]->Points[i]->LegendText = context.marshal_as<String^>(dc.getStatAt(i));
+			chartFor4Request->Series[0]->Points[i]->IsValueShownAsLabel = true;
+			chartFor4Request->Series[0]->Label = "#PERCENT{p}";
 		}
 
 		// Удаляем сформированную выборку
@@ -1498,7 +1500,7 @@ System::Void CourseWork::MyForm::exitButton_Click(System::Object ^ sender, Syste
 System::Void CourseWork::MyForm::helpButton_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	// Выводим подсказки на экран
-	MessageBox::Show("Эта программа разработана для курсовой работы на тему Разработка приложения с использованием динамических структур данных \nпо курсу Основы Алгоритмизации и ООП \nВариант №4 - домашняя кинотека\nВыполнил - студент группы 940, Башев К.С.");
+	MessageBox::Show("Эта программа разработана для курсовой работы на тему 'Разработка приложения с использованием динамических структур данных' \nпо курсу Основы Алгоритмизации и ООП \nВариант №4 - домашняя кинотека\nВыполнил - студент группы 940, Башев К.С.");
 	return System::Void();
 }
 
